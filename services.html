@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>خدماتنا | مسار أون لاين</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Cairo', sans-serif; line-height: 1.6; background: #F5F5F5; color: #333; }
+        
+        :root { --red: #FF0000; --blue: #0000FF; --gold: #FFD700; --green: #00CC00; --orange: #FF6600; --white: #FFFFFF; --gray: #666666; }
+        
+        .top-bar { background: var(--orange); color: white; padding: 10px 20px; text-align: center; font-size: 1rem; font-weight: 700; }
+        header { background: var(--red); color: white; padding: 1rem 0; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 15px rgba(255,0,0,0.3); }
+        .nav-container { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; }
+        
+        .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; color: white; font-weight: 800; font-size: 1.6rem; }
+        .logo-icon { width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, var(--gold), var(--orange)); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(255,215,0,0.4); border: 3px solid var(--white); }
+        .logo-icon img { width: 45px; height: 45px; object-fit: contain; animation: floatAstronaut 3s ease-in-out infinite; }
+        @keyframes floatAstronaut { 0%,100%{transform:translateY(0) rotate(0)} 50%{transform:translateY(-10px) rotate(10deg)} }
+        
+        .logo-text .arabic { color: white; font-size: 1.5rem; font-weight: 800; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .logo-text .english { font-size: 0.8rem; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; }
+        
+        nav ul { list-style: none; display: flex; gap: 20px; }
+        nav a { color: white; text-decoration: none; font-weight: 600; padding: 10px 18px; border-radius: 25px; transition: all 0.3s; }
+        nav a:hover { background: var(--gold); color: var(--red); transform: translateY(-2px); }
+        
+        .page-hero { background: var(--blue); color: white; padding: 80px 20px; text-align: center; position: relative; overflow: hidden; }
+        .page-hero::before { content: '🚀'; position: absolute; top: 20px; right: 50px; font-size: 5rem; opacity: 0.2; animation: floatAstronaut 4s ease-in-out infinite; }
+        .page-hero::after { content: '⭐'; position: absolute; bottom: 20px; left: 50px; font-size: 3rem; opacity: 0.2; animation: twinkle 3s ease-in-out infinite; }
+        @keyframes twinkle { 0%,100%{opacity:0.2} 50%{opacity:0.5} }
+        .page-hero h1 { font-size: 3.5rem; font-weight: 800; color: var(--gold); text-shadow: 3px 3px 6px rgba(0,0,0,0.3); margin-bottom: 15px; }
+        .page-hero p { font-size: 1.3rem; max-width: 700px; margin: 0 auto; opacity: 0.9; }
+        
+        .services-detail { max-width: 1200px; margin: 80px auto; padding: 0 20px; }
+        .services-detail h2 { text-align: center; font-size: 2.5rem; color: var(--blue); margin-bottom: 50px; }
+        .services-detail h2::after { content: ''; display: block; width: 80px; height: 4px; background: var(--red); margin: 15px auto; border-radius: 2px; }
+        .service-items { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .service-item { background: white; border-radius: 15px; padding: 40px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.1); transition: all 0.3s; border-bottom: 5px solid var(--blue); }
+        .service-item:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.2); border-bottom-color: var(--red); }
+        .service-item .icon { font-size: 4rem; margin-bottom: 20px; display: inline-block; padding: 20px; border-radius: 50%; background: var(--gold); color: var(--blue); }
+        .service-item h3 { font-size: 1.5rem; color: var(--blue); margin-bottom: 15px; }
+        .service-item p { color: var(--gray); line-height: 1.8; margin-bottom: 20px; }
+        .service-item ul { list-style: none; text-align: right; margin-bottom: 20px; }
+        .service-item ul li { padding: 8px 0; color: var(--gray); font-size: 0.95rem; }
+        .service-item ul li::before { content: '✓ '; color: var(--green); font-weight: bold; }
+        .service-btn { display: inline-block; padding: 12px 30px; background: var(--blue); color: white; border-radius: 25px; text-decoration: none; font-weight: 600; transition: all 0.3s; }
+        .service-btn:hover { background: var(--red); }
+        
+        .process-section { background: var(--green); padding: 80px 20px; color: white; }
+        .process-section h2 { text-align: center; font-size: 2.5rem; margin-bottom: 50px; color: white; }
+        .process-section h2::after { content: ''; display: block; width: 80px; height: 4px; background: var(--gold); margin: 15px auto; border-radius: 2px; }
+        .process-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; }
+        .process-step { text-align: center; padding: 30px; background: rgba(255,255,255,0.1); border-radius: 15px; border: 2px solid rgba(255,255,255,0.2); transition: all 0.3s; }
+        .process-step:hover { background: rgba(255,255,255,0.2); transform: translateY(-5px); }
+        .process-step .step-number { font-size: 2.5rem; font-weight: 800; color: var(--gold); margin-bottom: 10px; }
+        .process-step h3 { font-size: 1.2rem; margin-bottom: 10px; }
+        .process-step p { font-size: 0.9rem; opacity: 0.9; }
+        
+        footer { background: var(--blue); color: white; padding: 60px 20px 30px; }
+        .footer-content { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 40px; }
+        .footer-section h3 { font-size: 1.3rem; margin-bottom: 20px; color: var(--gold); }
+        .footer-section ul { list-style: none; }
+        .footer-section ul li { margin-bottom: 10px; }
+        .footer-section a { color: white; text-decoration: none; transition: color 0.3s; }
+        .footer-section a:hover { color: var(--gold); }
+        .social-icons { display: flex; gap: 15px; margin-top: 20px; }
+        .social-icon { width: 40px; height: 40px; border-radius: 50%; background: var(--orange); display: flex; align-items: center; justify-content: center; color: white; text-decoration: none; transition: all 0.3s; }
+        .social-icon:hover { background: var(--gold); transform: translateY(-3px); }
+        .footer-bottom { text-align: center; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 20px; margin-top: 40px; font-size: 0.9rem; }
+        
+        @media (max-width: 768px) {
+            .nav-container { flex-direction: column; gap: 15px; }
+            nav ul { flex-direction: column; text-align: center; gap: 10px; }
+            .page-hero h1 { font-size: 2.5rem; }
+            .services-detail h2, .process-section h2 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- الشريط العلوي -->
+    <div class="top-bar">
+        🚀 انطلق معنا! خصومات تصل إلى 50% على جميع خدماتنا
+    </div>
+    
+    <!-- الهيدر -->
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">
+                    <img src="https://img.icons8.com/color/96/astronaut.png" alt="رائد فضاء">
+                </div>
+                <div class="logo-text">
+                    <span class="arabic">مسار أون لاين</span>
+                    <span class="english">Masar Online</span>
+                </div>
+            </a>
+            
+            <nav>
+                <ul>
+                    <li><a href="index.html">الرئيسية</a></li>
+                    <li><a href="about.html">من نحن</a></li>
+                    <li><a href="services.html">خدماتنا</a></li>
+                    <li><a href="projects.html">أعمالنا</a></li>
+                    <li><a href="contact.html">اتصل بنا</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- قسم البطل -->
+    <section class="page-hero">
+        <h1>خدماتنا</h1>
+        <p>حلول رقمية متكاملة تساعدك على النمو والنجاح</p>
+    </section>
+
+    <!-- الخدمات التفصيلية -->
+    <section class="services-detail">
+        <h2>ماذا نقدم لك؟</h2>
+        <div class="service-items">
+            <div class="service-item">
+                <div class="icon">💼</div>
+                <h3>استشارات الأعمال</h3>
+                <p>نقدم استشارات متخصصة لتحسين أداء شركتك وزيادة أرباحك</p>
+                <ul>
+                    <li>تحليل الوضع الحالي</li>
+                    <li>تطوير الاستراتيجيات</li>
+                    <li>تحسين العمليات</li>
+                    <li>زيادة الإنتاجية</li>
+                </ul>
+                <a href="contact.html" class="service-btn">اطلب الخدمة</a>
+            </div>
+            
+            <div class="service-item">
+                <div class="icon">🚀</div>
+                <h3>التسويق الرقمي</h3>
+                <p>حملات تسويقية فعالة تصل إلى جمهورك المستهدف بدقة</p>
+                <ul>
+                    <li>إدارة وسائل التواصل</li>
+                    <li>تحسين محركات البحث SEO</li>
+                    <li>الإعلانات المدفوعة</li>
+                    <li>تحليل البيانات</li>
+                </ul>
+                <a href="contact.html" class="service-btn">اطلب الخدمة</a>
+            </div>
+            
+            <div class="service-item">
+                <div class="icon">💻</div>
+                <h3>تطوير المواقع</h3>
+                <p>تصميم وتطوير مواقع إلكترونية عصرية ومتجاوبة</p>
+                <ul>
+                    <li>تصميم واجهات جذابة</li>
+                    <li>تطوير متوافق مع الجوال</li>
+                    <li>سرعة وأداء عالي</li>
+                    <li>أمان وحماية</li>
+                </ul>
+                <a href="contact.html" class="service-btn">اطلب الخدمة</a>
+            </div>
+            
+            <div class="service-item">
+                <div class="icon">📱</div>
+                <h3>تطبيقات الجوال</h3>
+                <p>تطبيقات احترافية لنظامي iOS و Android</p>
+                <ul>
+                    <li>تصميم تجربة مستخدم ممتازة</li>
+                    <li>أداء سريع وموثوق</li>
+                    <li>تكامل مع الأنظمة</li>
+                    <li>دعم فني مستمر</li>
+                </ul>
+                <a href="contact.html" class="service-btn">اطلب الخدمة</a>
+            </div>
+            
+            <div class="service-item">
+                <div class="icon">🎨</div>
+                <h3>تصميم الجرافيك</h3>
+                <p>تصاميم إبداعية تعبر عن هوية علامتك التجارية</p>
+                <ul>
+                    <li>تصميم الشعارات</li>
+                    <li>الهوية البصرية</li>
+                    <li>مطبوعات إعلانية</li>
+                    <li>تصاميم سوشيال ميديا</li>
+                </ul>
+                <a href="contact.html" class="service-btn">اطلب الخدمة</a>
+            </div>
+            
+            <div class="service-item">
+                <div class="icon">📊</div>
+                <h3>تحليل البيانات</h3>
+                <p>تحويل البيانات إلى رؤى تساعدك على اتخاذ قرارات أفضل</p>
+                <ul>
+                    <li>تحليل سلوك العملاء</li>
+                    <li>تقارير أداء</li>
+                    <li>لوحات تحكم تفاعلية</li>
+                    <li>تنبؤات مستقبلية</li>
+                </ul>
+                <a href="contact.html" class="service-btn">اطلب الخدمة</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- عملية العمل -->
+    <section class="process-section">
+        <h2>كيف نعمل؟</h2>
+        <div class="process-grid">
+            <div class="process-step">
+                <div class="step-number">1</div>
+                <h3>الاستشارة</h3>
+                <p>نستمع لاحتياجاتك ونفهم أهدافك</p>
+            </div>
+            
+            <div class="process-step">
+                <div class="step-number">2</div>
+                <h3>التخطيط</h3>
+                <p>نضع خطة واضحة ومحددة</p>
+            </div>
+            
+            <div class="process-step">
+                <div class="step-number">3</div>
+                <h3>التنفيذ</h3>
+                <p>ننفذ المشروع بكفاءة واحترافية</p>
+            </div>
+            
+            <div class="process-step">
+                <div class="step-number">4</div>
+                <h3>التقييم</h3>
+                <p>نقيس النتائج ونحسن الأداء</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- الفوتر -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>🚀 مسار أون لاين</h3>
+                <p>MASAR ONLINE</p>
+                <p>شريكك الرقمي الموثوق</p>
+                <div class="social-icons">
+                    <a href="#" class="social-icon">📘</a>
+                    <a href="#" class="social-icon">🐦</a>
+                    <a href="#" class="social-icon">📸</a>
+                    <a href="#" class="social-icon">💼</a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3>روابط سريعة</h3>
+                <ul>
+                    <li><a href="index.html">الرئيسية</a></li>
+                    <li><a href="about.html">من نحن</a></li>
+                    <li><a href="services.html">خدماتنا</a></li>
+                    <li><a href="projects.html">أعمالنا</a></li>
+                    <li><a href="contact.html">اتصل بنا</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>خدماتنا</h3>
+                <ul>
+                    <li><a href="#">استشارات الأعمال</a></li>
+                    <li><a href="#">التسويق الرقمي</a></li>
+                    <li><a href="#">تطوير المواقع</a></li>
+                    <li><a href="#">تطبيقات الجوال</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>تواصل معنا</h3>
+                <p>📍 طرطوس، الجمهورية العربية السورية</p>
+                <p>📞 +963 994 057 199</p>
+                <p>📧 info@masaronline.com</p>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>© 2026 مسار أون لاين - جميع الحقوق محفوظة | Masar Online</p>
+        </div>
+    </footer>
+</body>
+</html>

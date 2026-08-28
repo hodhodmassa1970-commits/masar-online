@@ -1,0 +1,295 @@
+ <!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>من نحن | مسار أون لاين</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Cairo', sans-serif; line-height: 1.6; background: #F5F5F5; color: #333; }
+        
+        :root { --red: #FF0000; --blue: #0000FF; --gold: #FFD700; --green: #00CC00; --orange: #FF6600; --white: #FFFFFF; --gray: #666666; }
+        
+        .top-bar { background: var(--orange); color: white; padding: 10px 20px; text-align: center; font-size: 1rem; font-weight: 700; }
+        header { background: var(--red); color: white; padding: 1rem 0; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 15px rgba(255,0,0,0.3); }
+        .nav-container { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; }
+        
+        .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; color: white; font-weight: 800; font-size: 1.6rem; }
+        .logo-icon { width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, var(--gold), var(--orange)); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(255,215,0,0.4); border: 3px solid var(--white); }
+        .logo-icon img { width: 45px; height: 45px; object-fit: contain; animation: floatAstronaut 3s ease-in-out infinite; }
+        @keyframes floatAstronaut { 0%,100%{transform:translateY(0) rotate(0)} 50%{transform:translateY(-10px) rotate(10deg)} }
+        
+        .logo-text .arabic { color: white; font-size: 1.5rem; font-weight: 800; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .logo-text .english { font-size: 0.8rem; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; }
+        
+        nav ul { list-style: none; display: flex; gap: 20px; }
+        nav a { color: white; text-decoration: none; font-weight: 600; padding: 10px 18px; border-radius: 25px; transition: all 0.3s; }
+        nav a:hover { background: var(--gold); color: var(--red); transform: translateY(-2px); }
+        
+        .page-hero { background: var(--blue); color: white; padding: 80px 20px; text-align: center; position: relative; overflow: hidden; }
+        .page-hero::before { content: '👨‍🚀'; position: absolute; top: 20px; right: 50px; font-size: 5rem; opacity: 0.2; animation: floatAstronaut 4s ease-in-out infinite; }
+        .page-hero::after { content: '⭐'; position: absolute; bottom: 20px; left: 50px; font-size: 3rem; opacity: 0.2; animation: twinkle 3s ease-in-out infinite; }
+        @keyframes twinkle { 0%,100%{opacity:0.2} 50%{opacity:0.5} }
+        .page-hero h1 { font-size: 3.5rem; font-weight: 800; color: var(--gold); text-shadow: 3px 3px 6px rgba(0,0,0,0.3); margin-bottom: 15px; }
+        .page-hero p { font-size: 1.3rem; max-width: 700px; margin: 0 auto; opacity: 0.9; }
+        
+        .about-section { max-width: 1200px; margin: 80px auto; padding: 0 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; }
+        .about-text h2 { font-size: 2.5rem; color: var(--blue); margin-bottom: 20px; }
+        .about-text h2::after { content: ''; display: block; width: 80px; height: 4px; background: var(--red); margin-top: 10px; border-radius: 2px; }
+        .about-text p { font-size: 1.1rem; color: var(--gray); line-height: 1.8; margin-bottom: 20px; }
+        .about-image img { max-width: 100%; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        
+        .vision-mission { background: var(--green); padding: 80px 20px; color: white; }
+        .vm-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+        .vm-card { background: rgba(255,255,255,0.1); border-radius: 20px; padding: 40px; text-align: center; border: 2px solid rgba(255,255,255,0.2); transition: all 0.3s; }
+        .vm-card:hover { background: rgba(255,255,255,0.2); transform: translateY(-10px); }
+        .vm-card .icon { font-size: 3rem; margin-bottom: 20px; }
+        .vm-card h3 { font-size: 1.8rem; margin-bottom: 20px; color: var(--gold); }
+        .vm-card p { font-size: 1.1rem; line-height: 1.8; opacity: 0.9; }
+        
+        .values-section { max-width: 1200px; margin: 80px auto; padding: 0 20px; }
+        .values-section h2 { text-align: center; font-size: 2.5rem; color: var(--blue); margin-bottom: 50px; }
+        .values-section h2::after { content: ''; display: block; width: 80px; height: 4px; background: var(--red); margin: 15px auto; border-radius: 2px; }
+        .values-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
+        .value-card { background: white; border-radius: 15px; padding: 30px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.1); transition: all 0.3s; border-bottom: 4px solid var(--blue); }
+        .value-card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.2); border-bottom-color: var(--red); }
+        .value-card .icon { font-size: 3rem; margin-bottom: 15px; }
+        .value-card h3 { font-size: 1.3rem; color: var(--blue); margin-bottom: 10px; }
+        .value-card p { color: var(--gray); font-size: 0.95rem; }
+        
+        .stats-section { background: var(--orange); padding: 60px 20px; color: white; }
+        .stats-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; text-align: center; }
+        .stat-item { padding: 30px; }
+        .stat-item .number { font-size: 3rem; font-weight: 800; color: var(--gold); }
+        .stat-item .label { font-size: 1.2rem; margin-top: 10px; font-weight: 600; }
+        
+        .team-section { max-width: 1200px; margin: 80px auto; padding: 0 20px; }
+        .team-section h2 { text-align: center; font-size: 2.5rem; color: var(--blue); margin-bottom: 50px; }
+        .team-section h2::after { content: ''; display: block; width: 80px; height: 4px; background: var(--red); margin: 15px auto; border-radius: 2px; }
+        .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
+        .team-card { background: white; border-radius: 15px; padding: 30px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.1); transition: all 0.3s; }
+        .team-card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.2); }
+        .team-card img { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; margin-bottom: 20px; border: 4px solid var(--gold); }
+        .team-card h3 { font-size: 1.3rem; color: var(--blue); margin-bottom: 5px; }
+        .team-card .position { color: var(--orange); font-weight: 600; margin-bottom: 10px; }
+        .team-card p { color: var(--gray); font-size: 0.9rem; }
+        
+        footer { background: var(--blue); color: white; padding: 60px 20px 30px; }
+        .footer-content { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 40px; }
+        .footer-section h3 { font-size: 1.3rem; margin-bottom: 20px; color: var(--gold); }
+        .footer-section ul { list-style: none; }
+        .footer-section ul li { margin-bottom: 10px; }
+        .footer-section a { color: white; text-decoration: none; transition: color 0.3s; }
+        .footer-section a:hover { color: var(--gold); }
+        .social-icons { display: flex; gap: 15px; margin-top: 20px; }
+        .social-icon { width: 40px; height: 40px; border-radius: 50%; background: var(--orange); display: flex; align-items: center; justify-content: center; color: white; text-decoration: none; transition: all 0.3s; }
+        .social-icon:hover { background: var(--gold); transform: translateY(-3px); }
+        .footer-bottom { text-align: center; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 20px; margin-top: 40px; font-size: 0.9rem; }
+        
+        @media (max-width: 768px) {
+            .nav-container { flex-direction: column; gap: 15px; }
+            nav ul { flex-direction: column; text-align: center; gap: 10px; }
+            .page-hero h1 { font-size: 2.5rem; }
+            .about-section { grid-template-columns: 1fr; }
+            .vm-grid { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <!-- الشريط العلوي -->
+    <div class="top-bar">
+        🚀 انطلق معنا! خصومات تصل إلى 50% على جميع خدماتنا
+    </div>
+    
+    <!-- الهيدر -->
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">
+                    <img src="https://img.icons8.com/color/96/astronaut.png" alt="رائد فضاء">
+                </div>
+                <div class="logo-text">
+                    <span class="arabic">مسار أون لاين</span>
+                    <span class="english">Masar Online</span>
+                </div>
+            </a>
+            
+            <nav>
+                <ul>
+                    <li><a href="index.html">الرئيسية</a></li>
+                    <li><a href="about.html">من نحن</a></li>
+                    <li><a href="services.html">خدماتنا</a></li>
+                    <li><a href="projects.html">أعمالنا</a></li>
+                    <li><a href="contact.html">اتصل بنا</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- قسم البطل -->
+    <section class="page-hero">
+        <h1>من نحن</h1>
+        <p>تعرف على قصة مسار أون لاين ورحلتنا نحو التميز</p>
+    </section>
+
+    <!-- نبذة عن الشركة -->
+    <section class="about-section">
+        <div class="about-text">
+            <h2>قصتنا</h2>
+            <p>بدأت مسار أون لاين برؤية واضحة: أن نكون الشريك الرقمي الأول للشركات في المنطقة. منذ تأسيسها، ونحن نعمل بجد لتقديم حلول مبتكرة تساعد عملائنا على النمو والنجاح.</p>
+            <p>نؤمن بأن كل شركة لديها القدرة على تحقيق التميز، ودورنا هو توفير الأدوات والخبرات اللازمة لتحقيق ذلك. فريقنا من المحترفين يعمل بشغف لتحويل أفكارك إلى واقع ملموس.</p>
+            <p>اليوم، نحن فخورون بخدمة أكثر من 500 عميل في مختلف القطاعات، ونواصل التطور لنبقى في صدارة المشهد الرقمي.</p>
+        </div>
+        <div class="about-image">
+            <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="فريق العمل">
+        </div>
+    </section>
+
+    <!-- الرؤية والرسالة -->
+    <section class="vision-mission">
+        <div class="vm-grid">
+            <div class="vm-card">
+                <div class="icon">🔭</div>
+                <h3>رؤيتنا</h3>
+                <p>أن نكون الشركة الرائدة في تقديم الحلول الرقمية المتكاملة، وأن نكون الخيار الأول لعملائنا في المنطقة والعالم.</p>
+            </div>
+            <div class="vm-card">
+                <div class="icon">🎯</div>
+                <h3>رسالتنا</h3>
+                <p>تمكين الشركات والأفراد من تحقيق أهدافهم من خلال حلول رقمية مبتكرة وعالية الجودة، مع الالتزام بأعلى معايير الاحترافية.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- القيم -->
+    <section class="values-section">
+        <h2>قيمنا</h2>
+        <div class="values-grid">
+            <div class="value-card">
+                <div class="icon">💎</div>
+                <h3>الجودة</h3>
+                <p>نلتزم بأعلى معايير الجودة في كل ما نقدمه</p>
+            </div>
+            <div class="value-card">
+                <div class="icon">🤝</div>
+                <h3>الثقة</h3>
+                <p>نبني علاقات طويلة الأمد مبنية على الثقة والشفافية</p>
+            </div>
+            <div class="value-card">
+                <div class="icon">💡</div>
+                <h3>الابتكار</h3>
+                <p>نبحث دائماً عن حلول جديدة ومبتكرة لتحديات الأعمال</p>
+            </div>
+            <div class="value-card">
+                <div class="icon">⚡</div>
+                <h3>السرعة</h3>
+                <p>نلتزم بتسليم المشاريع في الوقت المحدد وبكفاءة عالية</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- الإحصائيات -->
+    <section class="stats-section">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="number">+500</div>
+                <div class="label">عميل سعيد</div>
+            </div>
+            <div class="stat-item">
+                <div class="number">+1000</div>
+                <div class="label">مشروع منجز</div>
+            </div>
+            <div class="stat-item">
+                <div class="number">+10</div>
+                <div class="label">سنوات خبرة</div>
+            </div>
+            <div class="stat-item">
+                <div class="number">+50</div>
+                <div class="label">خبير محترف</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- فريق العمل -->
+    <section class="team-section">
+        <h2>فريقنا المميز</h2>
+        <div class="team-grid">
+            <div class="team-card">
+                <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" alt="المدير التنفيذي">
+                <h3>أحمد محمد</h3>
+                <div class="position">المدير التنفيذي</div>
+                <p>خبرة 15 عاماً في إدارة الأعمال والتقنية</p>
+            </div>
+            <div class="team-card">
+                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" alt="مديرة التسويق">
+                <h3>سارة العلي</h3>
+                <div class="position">مديرة التسويق</div>
+                <p>متخصصة في التسويق الرقمي وبناء العلامات التجارية</p>
+            </div>
+            <div class="team-card">
+                <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" alt="مدير التقنية">
+                <h3>خالد السالم</h3>
+                <div class="position">مدير التقنية</div>
+                <p>خبير في تطوير البرمجيات والحلول الرقمية</p>
+            </div>
+            <div class="team-card">
+                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" alt="مديرة خدمة العملاء">
+                <h3>نورة العنزي</h3>
+                <div class="position">مديرة خدمة العملاء</div>
+                <p>متخصصة في تجربة العملاء وبناء العلاقات</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- الفوتر -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>🚀 مسار أون لاين</h3>
+                <p>MASAR ONLINE</p>
+                <p>شريكك الرقمي الموثوق</p>
+                <div class="social-icons">
+                    <a href="#" class="social-icon">📘</a>
+                    <a href="#" class="social-icon">🐦</a>
+                    <a href="#" class="social-icon">📸</a>
+                    <a href="#" class="social-icon">💼</a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3>روابط سريعة</h3>
+                <ul>
+                    <li><a href="index.html">الرئيسية</a></li>
+                    <li><a href="about.html">من نحن</a></li>
+                    <li><a href="services.html">خدماتنا</a></li>
+                    <li><a href="projects.html">أعمالنا</a></li>
+                    <li><a href="contact.html">اتصل بنا</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>خدماتنا</h3>
+                <ul>
+                    <li><a href="#">استشارات الأعمال</a></li>
+                    <li><a href="#">التسويق الرقمي</a></li>
+                    <li><a href="#">تطوير المواقع</a></li>
+                    <li><a href="#">تطبيقات الجوال</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>تواصل معنا</h3>
+                <p>📍 طرطوس، الجمهورية العربية السورية</p>
+                <p>📞 +963 994 057 199</p>
+                <p>📧 info@masaronline.com</p>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>© 2026 مسار أون لاين - جميع الحقوق محفوظة | Masar Online</p>
+        </div>
+    </footer>
+</body>
+</html>

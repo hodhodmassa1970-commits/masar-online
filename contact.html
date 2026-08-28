@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اتصل بنا | مسار أون لاين</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Cairo', sans-serif; line-height: 1.6; background: #F5F5F5; color: #333; }
+        
+        :root { --red: #FF0000; --blue: #0000FF; --gold: #FFD700; --green: #00CC00; --orange: #FF6600; --white: #FFFFFF; --gray: #666666; }
+        
+        .top-bar { background: var(--orange); color: white; padding: 10px 20px; text-align: center; font-size: 1rem; font-weight: 700; }
+        header { background: var(--red); color: white; padding: 1rem 0; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 15px rgba(255,0,0,0.3); }
+        .nav-container { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; }
+        
+        .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; color: white; font-weight: 800; font-size: 1.6rem; }
+        .logo-icon { width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, var(--gold), var(--orange)); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(255,215,0,0.4); border: 3px solid var(--white); }
+        .logo-icon img { width: 45px; height: 45px; object-fit: contain; animation: floatAstronaut 3s ease-in-out infinite; }
+        @keyframes floatAstronaut { 0%,100%{transform:translateY(0) rotate(0)} 50%{transform:translateY(-10px) rotate(10deg)} }
+        
+        .logo-text .arabic { color: white; font-size: 1.5rem; font-weight: 800; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .logo-text .english { font-size: 0.8rem; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; }
+        
+        nav ul { list-style: none; display: flex; gap: 20px; }
+        nav a { color: white; text-decoration: none; font-weight: 600; padding: 10px 18px; border-radius: 25px; transition: all 0.3s; }
+        nav a:hover { background: var(--gold); color: var(--red); transform: translateY(-2px); }
+        
+        .page-hero { background: var(--blue); color: white; padding: 80px 20px; text-align: center; position: relative; overflow: hidden; }
+        .page-hero::before { content: '📞'; position: absolute; top: 20px; right: 50px; font-size: 5rem; opacity: 0.2; animation: floatAstronaut 4s ease-in-out infinite; }
+        .page-hero::after { content: '⭐'; position: absolute; bottom: 20px; left: 50px; font-size: 3rem; opacity: 0.2; animation: twinkle 3s ease-in-out infinite; }
+        @keyframes twinkle { 0%,100%{opacity:0.2} 50%{opacity:0.5} }
+        .page-hero h1 { font-size: 3.5rem; font-weight: 800; color: var(--gold); text-shadow: 3px 3px 6px rgba(0,0,0,0.3); margin-bottom: 15px; }
+        .page-hero p { font-size: 1.3rem; max-width: 700px; margin: 0 auto; opacity: 0.9; }
+        
+        .contact-info-section { max-width: 1200px; margin: 80px auto; padding: 0 20px; }
+        .contact-info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-bottom: 60px; }
+        .contact-info-card { background: white; border-radius: 15px; padding: 30px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.1); transition: all 0.3s; border-bottom: 4px solid var(--blue); }
+        .contact-info-card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.2); border-bottom-color: var(--red); }
+        .contact-info-card .icon { font-size: 3rem; margin-bottom: 15px; }
+        .contact-info-card h3 { font-size: 1.3rem; color: var(--blue); margin-bottom: 10px; }
+        .contact-info-card p { color: var(--gray); font-size: 1rem; }
+        
+        .contact-form-section { background: var(--green); padding: 80px 20px; color: white; }
+        .contact-form-section h2 { text-align: center; font-size: 2.5rem; margin-bottom: 50px; }
+        .contact-form-section h2::after { content: ''; display: block; width: 80px; height: 4px; background: var(--gold); margin: 15px auto; border-radius: 2px; }
+        .contact-form { max-width: 700px; margin: 0 auto; background: white; border-radius: 20px; padding: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .form-group { margin-bottom: 25px; }
+        .form-group label { display: block; margin-bottom: 8px; color: var(--blue); font-weight: 600; }
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 12px 15px; border: 2px solid #ddd; border-radius: 10px; font-family: 'Cairo', sans-serif; font-size: 1rem; transition: all 0.3s; }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--blue); outline: none; box-shadow: 0 0 0 3px rgba(0,0,255,0.1); }
+        .form-group textarea { height: 150px; resize: vertical; }
+        .submit-btn { width: 100%; padding: 15px; background: var(--orange); color: white; border: none; border-radius: 50px; font-size: 1.2rem; font-weight: 700; cursor: pointer; transition: all 0.3s; box-shadow: 0 5px 15px rgba(255,102,0,0.4); }
+        .submit-btn:hover { background: var(--red); transform: translateY(-3px); box-shadow: 0 10px 25px rgba(255,0,0,0.4); }
+        
+        .map-section { max-width: 1200px; margin: 80px auto; padding: 0 20px; }
+        .map-section h2 { text-align: center; font-size: 2.5rem; color: var(--blue); margin-bottom: 30px; }
+        .map-section h2::after { content: ''; display: block; width: 80px; height: 4px; background: var(--red); margin: 15px auto; border-radius: 2px; }
+        .map-container { border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .map-container iframe { width: 100%; height: 450px; border: 0; }
+        
+        .working-hours { max-width: 600px; margin: 60px auto; padding: 30px; background: white; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); text-align: center; }
+        .working-hours h3 { font-size: 1.5rem; color: var(--blue); margin-bottom: 20px; }
+        .working-hours table { width: 100%; border-collapse: collapse; }
+        .working-hours table td { padding: 10px; border-bottom: 1px solid #eee; color: var(--gray); }
+        .working-hours table td:first-child { font-weight: 600; color: var(--blue); }
+        .working-hours .closed { color: var(--red); font-weight: 700; }
+        
+        footer { background: var(--blue); color: white; padding: 60px 20px 30px; }
+        .footer-content { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 40px; }
+        .footer-section h3 { font-size: 1.3rem; margin-bottom: 20px; color: var(--gold); }
+        .footer-section ul { list-style: none; }
+        .footer-section ul li { margin-bottom: 10px; }
+        .footer-section a { color: white; text-decoration: none; transition: color 0.3s; }
+        .footer-section a:hover { color: var(--gold); }
+        .social-icons { display: flex; gap: 15px; margin-top: 20px; }
+        .social-icon { width: 40px; height: 40px; border-radius: 50%; background: var(--orange); display: flex; align-items: center; justify-content: center; color: white; text-decoration: none; transition: all 0.3s; }
+        .social-icon:hover { background: var(--gold); transform: translateY(-3px); }
+        .footer-bottom { text-align: center; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 20px; margin-top: 40px; font-size: 0.9rem; }
+        
+        @media (max-width: 768px) {
+            .nav-container { flex-direction: column; gap: 15px; }
+            nav ul { flex-direction: column; text-align: center; gap: 10px; }
+            .page-hero h1 { font-size: 2.5rem; }
+            .contact-form { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- الشريط العلوي -->
+    <div class="top-bar">
+        🚀 انطلق معنا! خصومات تصل إلى 50% على جميع خدماتنا
+    </div>
+    
+    <!-- الهيدر -->
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">
+                    <img src="https://img.icons8.com/color/96/astronaut.png" alt="رائد فضاء">
+                </div>
+                <div class="logo-text">
+                    <span class="arabic">مسار أون لاين</span>
+                    <span class="english">Masar Online</span>
+                </div>
+            </a>
+            
+            <nav>
+                <ul>
+                    <li><a href="index.html">الرئيسية</a></li>
+                    <li><a href="about.html">من نحن</a></li>
+                    <li><a href="services.html">خدماتنا</a></li>
+                    <li><a href="projects.html">أعمالنا</a></li>
+                    <li><a href="contact.html">اتصل بنا</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- قسم البطل -->
+    <section class="page-hero">
+        <h1>اتصل بنا</h1>
+        <p>نحن هنا لمساعدتك - تواصل معنا في أي وقت</p>
+    </section>
+
+    <!-- معلومات الاتصال -->
+    <section class="contact-info-section">
+        <div class="contact-info-grid">
+            <div class="contact-info-card">
+                <div class="icon">📍</div>
+                <h3>العنوان</h3>
+                <p>طرطوس، الجمهورية العربية السورية</p>
+            </div>
+            
+            <div class="contact-info-card">
+                <div class="icon">📞</div>
+                <h3>الهاتف</h3>
+                <p>+963 994 057 199</p>
+            </div>
+            
+            <div class="contact-info-card">
+                <div class="icon">📧</div>
+                <h3>البريد الإلكتروني</h3>
+                <p>info@masaronline.com</p>
+            </div>
+            
+            <div class="contact-info-card">
+                <div class="icon">💬</div>
+                <h3>واتساب</h3>
+                <p>+963 994 057 199</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- نموذج الاتصال -->
+    <section class="contact-form-section">
+        <h2>أرسل لنا رسالة</h2>
+        <form class="contact-form" action="#" method="POST">
+            <div class="form-group">
+                <label for="name">الاسم الكامل *</label>
+                <input type="text" id="name" name="name" required placeholder="أدخل اسمك الكامل">
+            </div>
+            
+            <div class="form-group">
+                <label for="email">البريد الإلكتروني *</label>
+                <input type="email" id="email" name="email" required placeholder="example@email.com">
+            </div>
+            
+            <div class="form-group">
+                <label for="phone">رقم الهاتف</label>
+                <input type="tel" id="phone" name="phone" placeholder="+963 9XX XXX XXX">
+            </div>
+            
+            <div class="form-group">
+                <label for="subject">الموضوع *</label>
+                <select id="subject" name="subject" required>
+                    <option value="">اختر الموضوع</option>
+                    <option value="consulting">استشارات الأعمال</option>
+                    <option value="marketing">التسويق الرقمي</option>
+                    <option value="web">تطوير المواقع</option>
+                    <option value="mobile">تطبيقات الجوال</option>
+                    <option value="design">تصميم الجرافيك</option>
+                    <option value="other">موضوع آخر</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="message">رسالتك *</label>
+                <textarea id="message" name="message" required placeholder="اكتب رسالتك هنا..."></textarea>
+            </div>
+            
+            <button type="submit" class="submit-btn">إرسال الرسالة</button>
+        </form>
+    </section>
+
+    <!-- الخريطة -->
+    <section class="map-section">
+        <h2>موقعنا على الخريطة</h2>
+        <div class="map-container">
+            <iframe 
+                src="https://maps.google.com/maps?q=Tartus%2C%20Syria&t=m&z=13&output=embed" 
+                width="100%" 
+                height="450" 
+                style="border:0;" 
+                allowfullscreen="" 
+                loading="lazy">
+            </iframe>
+        </div>
+    </section>
+
+    <!-- ساعات العمل -->
+    <section class="working-hours">
+        <h3>ساعات العمل</h3>
+        <table>
+            <tr>
+                <td>السبت - الأربعاء</td>
+                <td>9:00 ص - 6:00 م</td>
+            </tr>
+            <tr>
+                <td>الخميس</td>
+                <td>9:00 ص - 2:00 م</td>
+            </tr>
+            <tr>
+                <td>الجمعة</td>
+                <td class="closed">مغلق</td>
+            </tr>
+        </table>
+    </section>
+
+    <!-- الفوتر -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>🚀 مسار أون لاين</h3>
+                <p>MASAR ONLINE</p>
+                <p>شريكك الرقمي الموثوق</p>
+                <div class="social-icons">
+                    <a href="#" class="social-icon">📘</a>
+                    <a href="#" class="social-icon">🐦</a>
+                    <a href="#" class="social-icon">📸</a>
+                    <a href="#" class="social-icon">💼</a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3>روابط سريعة</h3>
+                <ul>
+                    <li><a href="index.html">الرئيسية</a></li>
+                    <li><a href="about.html">من نحن</a></li>
+                    <li><a href="services.html">خدماتنا</a></li>
+                    <li><a href="projects.html">أعمالنا</a></li>
+                    <li><a href="contact.html">اتصل بنا</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>خدماتنا</h3>
+                <ul>
+                    <li><a href="#">استشارات الأعمال</a></li>
+                    <li><a href="#">التسويق الرقمي</a></li>
+                    <li><a href="#">تطوير المواقع</a></li>
+                    <li><a href="#">تطبيقات الجوال</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>تواصل معنا</h3>
+                <p>📍 طرطوس، الجمهورية العربية السورية</p>
+                <p>📞 +963 994 057 199</p>
+                <p>📧 info@masaronline.com</p>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>© 2026 مسار أون لاين - جميع الحقوق محفوظة | Masar Online</p>
+        </div>
+    </footer>
+</body>
+</html>
