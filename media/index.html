@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10100e">
+  <title>متّة على المزاج — مشاهدة الفيديو</title>
+  <style>
+    :root { color-scheme: dark; --gold:#d6b574; --cream:#f7f0df; --muted:#c5bda9; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 32px 18px;
+      color: var(--cream); font-family: "Noto Sans Arabic", Tahoma, Arial, sans-serif;
+      background: radial-gradient(ellipse at 50% 0%, #3a3020 0%, #191814 45%, #0b0c0b 100%);
+    }
+    main { width: min(1120px, 100%); }
+    .eyebrow { color: var(--gold); font-size: .9rem; letter-spacing: .04em; margin: 0 0 10px; }
+    h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.15; }
+    .lead { margin: 12px 0 24px; color: var(--muted); font-size: clamp(1rem, 2vw, 1.15rem); }
+    .stage {
+      padding: 12px; border: 1px solid rgba(214,181,116,.42); border-radius: 22px;
+      background: rgba(16,16,14,.78); box-shadow: 0 22px 90px rgba(0,0,0,.48);
+    }
+    video { display:block; width:100%; height:auto; aspect-ratio:16 / 9; border-radius:14px; background:#050505; }
+    .details { display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; padding:18px 4px 4px; }
+    .specs { color:var(--muted); font-size:.95rem; }
+    .download {
+      display:inline-flex; align-items:center; justify-content:center; gap:10px; padding:12px 20px;
+      border-radius:999px; color:#17130b; background:linear-gradient(135deg,#f2dba7,#c69e52);
+      text-decoration:none; font-weight:800; box-shadow:0 6px 22px rgba(214,181,116,.2);
+    }
+    .download:hover { filter:brightness(1.08); transform:translateY(-1px); }
+    .note { color:#a8a08f; font-size:.85rem; margin:16px 4px 0; }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="eyebrow">فيلم قصير باللهجة الشامية</p>
+    <h1>متّة على المزاج</h1>
+    <p class="lead">ثلاثة أباريق على الغاز، ثلاث درجات حرارة، وكاسات المتّة تسأل: «انتو كيف بتحبوني؟»</p>
+    <section class="stage" aria-label="مشغل الفيديو">
+      <video controls playsinline preload="metadata" poster="/media/mate_wide.png" aria-label="فيديو متّة على المزاج">
+        <source src="/mate_on_your_terms.mp4" type="video/mp4">
+        عذرًا، متصفحك لا يدعم تشغيل الفيديو. استخدم زر التنزيل أدناه.
+      </video>
+      <div class="details">
+        <div class="specs">MP4 · 1080p · 24 إطار/ثانية · 34 ثانية</div>
+        <a class="download" href="/mate_on_your_terms.mp4" download="mate_on_your_terms.mp4">تنزيل ملف MP4</a>
+      </div>
+    </section>
+    <p class="note">إذا لم يبدأ التشغيل، اضغط «تنزيل ملف MP4» ثم افتحه على جهازك.</p>
+  </main>
+</body>
+</html>
