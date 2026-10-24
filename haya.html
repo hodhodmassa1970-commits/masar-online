@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>هيا — فيلم الانطلاق (9:16 شامي)</title>
+<style>
+  :root{--gold:#f3c64b;--bg:#0b0d12}
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;color:#eef1f6;font-family:"Segoe UI",Tahoma,system-ui,sans-serif;
+       background:radial-gradient(1100px 640px at 50% -12%,#1b2333 0%,var(--bg) 62%)}
+  header{padding:22px 18px 6px;text-align:center}
+  h1{margin:0;font-size:clamp(20px,4.2vw,30px)} h1 b{color:var(--gold)}
+  .sub{margin:7px 0 0;color:#a9b3c6;font-size:13px}
+  .wrap{display:flex;gap:18px;justify-content:center;align-items:flex-start;flex-wrap:wrap;padding:14px 14px 6px}
+  .phone{width:min(400px,94vw);background:#000;border-radius:20px;overflow:hidden;position:relative;
+         box-shadow:0 34px 90px -34px #000d,0 0 0 1px #ffffff16}
+  video{display:block;width:100%;aspect-ratio:9/16;background:#000;object-fit:cover}
+  .tag{position:absolute;top:10px;right:10px;background:#0a0c12b8;border:1px solid #ffffff22;
+       color:#e9edf5;font-size:11px;padding:4px 9px;border-radius:99px;backdrop-filter:blur(6px)}
+  .side{width:min(300px,94vw);display:flex;flex-direction:column;gap:10px}
+  .card{background:#101724;border:1px solid #21304a;border-radius:14px;padding:12px 14px}
+  .card h3{margin:0 0 8px;font-size:13px;color:#cfd8e8;font-weight:600}
+  .card a{display:block;color:#0e1220;background:linear-gradient(180deg,#ffe6a8,#d9a53c);
+          text-decoration:none;padding:8px 11px;border-radius:9px;font-size:12.5px;font-weight:700;margin:6px 0 0}
+  .card a.g{background:#182233;color:#dbe2ee;border:1px solid #2a3953;font-weight:500}
+  .specs{font-size:12px;color:#93a0b6;line-height:1.9;direction:ltr;text-align:left}
+  footer{text-align:center;color:#7c889e;font-size:12px;padding:10px 16px 26px;line-height:1.8}
+  code{background:#141a26;padding:1px 6px;border-radius:6px;color:#cfd8e8;font-size:11.5px;direction:ltr}
+</style>
+</head>
+<body>
+<header>
+  <h1>هيا — <b>فيلم الانطلاق</b></h1>
+  <p class="sub">50 ثانية · 1080×1920 · ‏30fps · ‏H.264 + AAC · لهجة شامية · صوت واحد (voice-03)</p>
+</header>
+
+<div class="wrap">
+  <div class="phone">
+    <span class="tag" id="tag">9:16 · HD</span>
+    <video id="v" controls playsinline preload="metadata" poster="media/haya_poster.jpg">
+      <source src="media/haya_shami_vertical.mp4#t=0.1" type="video/mp4">
+      <source src="media/haya_shami_vertical_small.mp4" type="video/mp4">
+    </video>
+  </div>
+
+  <div class="side">
+    <div class="card">
+      <h3>الجودة</h3>
+      <a href="#" id="hd">HD كامل · 32 MB</a>
+      <a href="#" id="lt" class="g">خفيف · 6 MB ‏(540×960)</a>
+      <a href="media/haya_intro.gif" class="g" target="_blank">لمحة GIF (بلا صوت)</a>
+    </div>
+    <div class="card">
+      <h3>تحميل / فتح خارجي</h3>
+      <a href="media/haya_shami_vertical.mp4" download>تنزيل MP4 كامل الجودة</a>
+      <a href="media/haya_shami_vertical_small.mp4" download class="g">تنزيل النسخة الخفيفة</a>
+      <a href="media/haya_poster.jpg" download class="g">تنزيل الملصق</a>
+    </div>
+    <div class="card">
+      <h3>مواصفات</h3>
+      <div class="specs">
+        7 shots · 6 dissolves/cuts<br>
+        Arabic subtitles (Noto Kufi) + gold title (Amiri)<br>
+        confetti + light rays + grain + vignette<br>
+        score: 122 BPM, Am–F–C–G, side-chain ducking<br>
+        crowd bed + claps + risers + impacts
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  كل الوسائط داخل <code>media/</code> في هذا الفرع — تُعرض من GitHub Pages أو أي استضافة ثابتة.
+  <br>لإعادة إنتاج الفيلم: <code>python media/build_reel.py</code> (يتطلب ‏pillow · numpy · arabic-reshaper · python-bidi · imageio-ffmpeg).
+</footer>
+
+<script>
+  var v=document.getElementById('v'), tag=document.getElementById('tag');
+  var HD='media/haya_shami_vertical.mp4', LT='media/haya_shami_vertical_small.mp4';
+  function set(s,t){v.pause();v.removeAttribute('src');v.poster='media/haya_poster.jpg';v.src=s;v.load();
+                    tag.textContent=t;v.play().catch(function(){});}
+  document.getElementById('hd').onclick=function(e){e.preventDefault();set(HD,'9:16 · HD');};
+  document.getElementById('lt').onclick=function(e){e.preventDefault();set(LT,'9:16 · lightweight');};
+  v.onerror=function(){if(v.src.indexOf('small')<0){set(LT,'9:16 · lightweight (fallback)');}
+                      else{tag.textContent='تعذّر التشغيل — استعمل زر التنزيل';}};
+  if(!v.src){set(HD,'9:16 · HD');}
+</script>
+</body>
+</html>
