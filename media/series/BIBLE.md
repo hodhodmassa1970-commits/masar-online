@@ -74,3 +74,24 @@
 - `generate_image` cap: 10 calls per turn, AND upstream 429s count toward it. Batch 3–4 per turn.
 - TODO: child frames read lighter-haired than Haya — regenerate `e1_kitchen/e1_terrace/e1_classroom`
   with "same facial identity as the reference, dark brown hair, olive skin" and re-render E1.
+
+## IDENTITY LOCK (2026-10-25, from the user's own portrait)
+- Canonical face/outfit reference is now **`media/haya_portrait.png`** (the user's image): long wavy
+  **blonde** hair, blue-green eyes, fair glowing skin, cute bright smile. (Earlier note about "dark hair"
+  was WRONG — the pilot frames already match; do not "correct" it again.)
+- Every `generate_image` call passes `images=["media/haya_portrait.png"]`.
+- **Outfit rule (user asked explicitly):** the look must be *coordinated and cute* — cream/white tailored
+  blazer + matching trousers, **pointed white kitten heels with gold buckle**, **tan-beige structured
+  leather handbag** (silk scarf tied to the handle), gold hoops, slim gold watch, gold pendant, ring.
+  Shoes/bag/accessories always read as one set, never random.
+- **Energy rule:** she is *social and kinetic* — walking, turning, a twirl, phone out filming a selfie vlog,
+  greeting her audience. Prefer hard cuts (`tin: 0.04`) and wider zoom (`z` up to 1.13) over long dissolves.
+- She is a **social-media influencer who works in advertising** with a real audience ("أميرة الجماهير").
+- Plates are now generated **native 9:16** → prep's crop band has ~90 px slack, so use `cx: 0.50`
+  (0.62 only to push a composition past a mirror/reflection). The old 16:9 cx-band trick no longer applies.
+
+## g1 · "مسا الخير حبايبي" — RENDERED (19.42 s), pushed a550153
+Lines spoken verbatim in `voice-03` (never re-audition her): "مسا الخير حبايبي!" / "ما في أحلى من السهر
+بالبيت اللي بيشعرك بالراحة، وبرا البيت اللي بيشعرك بالسعادة." / "أنا هيا… أميرة الجماهير. بحييكن!"
+Shots: hg_mirror → hg_door → hg_walk (selfie vlog) → hg_spin (confetti). Files: `media/series/g1/out/`
+(hd 9.3 MB, web 1.7 MB, preview gif 1.9 MB = the one that plays in the Arena viewer).
