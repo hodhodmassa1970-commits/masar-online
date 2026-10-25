@@ -3,7 +3,8 @@
 import os, sys, glob, subprocess
 from PIL import Image
 import imageio_ffmpeg
-slug = {"g1": "haya_g1", "e0": "haya_e0", "pilot": "haya_pilot"}[sys.argv[1]]
+ep = sys.argv[1]
+slug = "haya_" + ep                      # g1 / e0 / pilot / e1..e6 all follow this pattern
 od = "/home/user/masar-online/media/series/%s/out" % sys.argv[1]
 src = os.path.join(od, "%s_land_web.mp4" % slug)
 out = os.path.join(od, "%s_land_preview.gif" % slug)
