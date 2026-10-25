@@ -71,10 +71,10 @@ def label(img, tag, ttl, extra=""):
 
 
 def main():
+    eps = [e for e in EPS if not ONLY or e[0] in ONLY]
     rows, cols = (1, len(eps)) if LAND and len(eps) <= 4 else (2, 4)
     wall = Image.new("RGB", (cols * PW, rows * (PH + LAB)), (9, 11, 16))
     frames = []
-    eps = [e for e in EPS if not ONLY or e[0] in ONLY]
     for i, (slug, tag, ttl, dur) in enumerate(eps):
         fs = grab(slug, dur)
         if not fs:
