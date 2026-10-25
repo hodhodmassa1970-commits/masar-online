@@ -33,6 +33,7 @@ EPS = [
     ("e6", "E6", "العودة", 33.6),
     ("e0", "E0", "البداية · الإعلانات", 36.9),
     ("g1", "G1", "مسا الخير حبايبي", 19.4),
+    ("pilot", "P", "الانطلاقة · المسرح", 50.2),
 ]
 # where to sample the two frames from, as a share of the runtime
 FRACS = [0.30, 0.74]
