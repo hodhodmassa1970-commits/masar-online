@@ -95,3 +95,12 @@ Lines spoken verbatim in `voice-03` (never re-audition her): "مسا الخير 
 بالبيت اللي بيشعرك بالراحة، وبرا البيت اللي بيشعرك بالسعادة." / "أنا هيا… أميرة الجماهير. بحييكن!"
 Shots: hg_mirror → hg_door → hg_walk (selfie vlog) → hg_spin (confetti). Files: `media/series/g1/out/`
 (hd 9.3 MB, web 1.7 MB, preview gif 1.9 MB = the one that plays in the Arena viewer).
+
+## e0 · «الحلقة الأولى · البداية» — RENDERED (36.85 s), pushed 2aade35
+Her world as an advertising influencer: `h0_studio` (ring-light, phone on tripod, REC on screen) →
+`h0_set` (billboard of her own campaign behind her) → `h0_phone` (night, reading comments; gold motto
+«إحنا سوا») → `h0_meet` (first café meetup, followers filming her, one hands her a letter).
+Lines in `voice-03`: «هلا فيكن! أنا هيا…» / «شغلي بالإعلانات: بكتب الفكرة، وبصوّر بإيدي، وبختار الضوّة.» /
+«وبالليل بقرا التعليقات، واحد واحد. في تعليق وحدا… يغيّرلك كل شي.» / «ولما التقينا بأول قهوة، صار عندي
+الجواب: الجمهور مش أرقام. الجمهور ناس.»
+Note: `cx` must aim at her face — 16:9 plates (studio 0.28, phone 0.64), native-9:16 plates 0.50.
