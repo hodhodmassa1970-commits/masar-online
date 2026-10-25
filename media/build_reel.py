@@ -201,21 +201,28 @@ def prep():
             bw = min(sw, int(round(sh * 16 / 9)))
             x0 = min(max(0, int(sw * x["cx"]) - bw // 2), sw - bw)
             im = im.crop((x0, 0, x0 + bw, sh)).resize((W * 2, H * 2), Image.LANCZOS)
-        else:                                          # 16:9 from a tall plate: panel + blur fill
+        elif x.get("fill") == "bleed":                 # wide venue/crowd shot: full-bleed crop
+            bh = int(round(sw * 9 / 16))
+            y0 = min(max(0, int(sh * x.get("cy", .45)) - bh // 2), sh - bh)
+            im = im.crop((0, y0, sw, y0 + bh)).resize((W * 2, H * 2), Image.LANCZOS)
+        else:                                          # tall plate: dominant panel + blurred fill
             sc = max(W * 2 / sw, H * 2 / sh)
             bg = im.resize((int(sw * sc), int(sh * sc)), Image.LANCZOS)
             bx, by = (bg.width - W * 2) // 2, (bg.height - H * 2) // 2
             bg = bg.crop((bx, by, bx + W * 2, by + H * 2)).filter(ImageFilter.GaussianBlur(38))
-            bg = ImageEnhance.Brightness(bg).enhance(.60)
-            bg = ImageEnhance.Color(bg).enhance(.90)
-            pw, ph = int(round(H * 2 * sw / sh)), H * 2
+            bg = ImageEnhance.Brightness(bg).enhance(.52)
+            bg = ImageEnhance.Color(bg).enhance(.92)
+            ph = int(H * 2 * 1.18); pw = int(round(ph * sw / sh))
             pan = im.resize((pw, ph), Image.LANCZOS)
+            oy = min(max(0, int((ph - H * 2) * x.get("cy", .5))), ph - H * 2)
+            pan = pan.crop((0, oy, pw, oy + H * 2))
             px = min(max(0, int((W * 2 - pw) * (.5 + (x["cx"] - .5) * 2))), W * 2 - pw)
-            sd = Image.new("L", (W * 2, H * 2), 0)
-            ImageDraw.Draw(sd).rectangle([px + 14, 8, px + pw + 26, H * 2 + 16], fill=115)
-            bg.paste((5, 7, 11), (0, 0), sd.filter(ImageFilter.GaussianBlur(24)))
-            bg.paste(pan, (px, 0))
-            im = bg
+            layer = Image.new("RGB", (W * 2, H * 2))
+            layer.paste(pan, (px, 0))
+            mk = Image.new("L", (W * 2, H * 2), 0)
+            ImageDraw.Draw(mk).rectangle([px, -30, px + pw, H * 2 + 30], fill=255)
+            mk = mk.filter(ImageFilter.GaussianBlur(52))
+            im = Image.composite(layer, bg, mk)
         im = im.filter(ImageFilter.UnsharpMask(radius=3.0, percent=115, threshold=2))
         x["master"] = os.path.join(B, "m%d.png" % x["i"]); im.save(x["master"])
     print("prep ok")
