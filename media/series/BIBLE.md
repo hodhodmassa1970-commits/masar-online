@@ -104,3 +104,21 @@ Lines in `voice-03`: «هلا فيكن! أنا هيا…» / «شغلي بالإ
 «وبالليل بقرا التعليقات، واحد واحد. في تعليق وحدا… يغيّرلك كل شي.» / «ولما التقينا بأول قهوة، صار عندي
 الجواب: الجمهور مش أرقام. الجمهور ناس.»
 Note: `cx` must aim at her face — 16:9 plates (studio 0.28, phone 0.64), native-9:16 plates 0.50.
+
+## SERIES COMPLETE — batch of 2026-10-25 (12:01 → 12:41, `media/series/batch.sh`)
+All eight films rendered, 9:16 1080x1920 30fps, `voice-03`, burned Arabic subtitles, gold Amiri titles.
+Order of life: **e1** الدفتر الأول 37.0 ث · **e2** السنة الصعبة 35.6 · **e3** البناء 31.7 ·
+**e4** اثنا عشر شخصاً 37.6 · **e5** بعد أن خرج الضوء 33.1 · **e6** العودة 33.6 · then the present-day pair
+**e0** البداية (الإعلانات) 36.9 · **g1** مسا الخير حبايبي 19.4. Total ≈ 4 min of film.
+- `e1` re-rendered: shot1+shot2 now use `e1_classroom.png` (her first audience) instead of the kitchen plate.
+- `e6` deliberately cuts to `e1_classroom.png` for its middle shot (memory echo of the same classroom).
+- `e5` last shot reuses pilot `s6_kneel.png` (crowd, arms open) for «نحنا اللي عملناه».
+- New frames this batch: `e1_classroom`, `e4_hall`, `e5_after`, `e6_school` (all native 9:16 → `cx: 0.50`).
+- `e1_terrace.png` **could not be generated** (model returned no image twice — retry with a softer prompt,
+  e.g. avoid "eight-year-old" + face reference together, or generate the child without the identity ref).
+- `media/recap.py` → `media/series/poster_wall.png` + `haya_series_recap.gif` (1.05 MB, plays in the viewer).
+- Per-episode viewer-friendly file is `haya_eN_preview.gif` (≤2 MB); `haya_eN_hd.mp4` must be downloaded
+  (raw.githubusercontent URL) — MP4 never plays inline here.
+- Known cosmetic debt: `e4_hall` banner has garbled English and ~25 people instead of 12;
+  `e6_school` banner is English too. Fix = regenerate those two plates with "exactly twelve people" /
+  Arabic lettering, then re-render e4 and e6 only.
