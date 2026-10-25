@@ -122,3 +122,22 @@ Order of life: **e1** الدفتر الأول 37.0 ث · **e2** السنة ال�
 - Known cosmetic debt: `e4_hall` banner has garbled English and ~25 people instead of 12;
   `e6_school` banner is English too. Fix = regenerate those two plates with "exactly twelve people" /
   Arabic lettering, then re-render e4 and e6 only.
+
+## 16:9 (landscape / YouTube) mode — added 2026-10-25
+`AR=16:9 python media/episode.py media/series/<e>/<e>.json` → W,H = 1920x1080, tiles 960x540,
+type sizes x0.72 (`ts()`), web copy at W//2, badge says "16:9 · 1080", teaser gif 430 px wide.
+Outputs are written next to the vertical ones with a `_land` suffix (`haya_g1_land_hd.mp4` …) and the
+vertical files are never touched (`episode.py` only clears files starting with `slug+suffix`).
+Framing of a tall plate in a wide frame (v2, `media/build_reel.py::prep`):
+  • default `panel` — the plate scaled to 1.18x frame height, positioned by `cx` (0=left,1=right) and
+    `cy` (which slice survives the 18% crop; .30 keeps faces high), composited over a blurred,
+    darkened cover of itself through a Gaussian-blurred mask → feathered edges, no pasted-box look.
+  • `"fill": "bleed"` — full-frame 16:9 crop of the tall plate at `cy` (no bars). Used for the crowd /
+    venue beats (`s5_crowd`, `s6_kneel`, `s7_finale`) where losing the vertical is fine.
+  • a plate already wider than 1.7 is used at full width (cx slides the window).
+Landscape cuts delivered: **g1** (19.5 ث), **e0** (37.0 ث), **pilot** (50.2 ث) — `_land_web.mp4` ≈ 1.6-5.5 MB.
+`media/series/pilot/pilot.json` now carries the launch reel as data (7 shots / 4 segs, audio copied into
+that folder), so the pilot renders in either format too.
+Fast re-cut trick: when only framing changed, run `… <e>.json timeline prep clips speech score final`
+— the 960x540 tiles are still valid, which cuts ~40% of the render time.
+`media/recap.py` accepts `RECAP_LAND=1 RECAP_EPS=g1,e0,pilot RECAP_SFX=_land RECAP_OUT=… RECAP_WALL=…`.
