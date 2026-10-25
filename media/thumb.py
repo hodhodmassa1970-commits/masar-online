@@ -87,9 +87,17 @@ def main():
            fill=(214, 224, 238, 240), anchor="ls")
 
     # corner badges
-    d.rounded_rectangle([58, 44, 372, 92], 12, fill=(10, 13, 20, 210))
-    d.text((76, 68), shp("مسلسل هيا · HD"), font=k2, fill=(255, 228, 170, 240), anchor="lm")
-    d.ellipse([76, 62, 88, 74], fill=(255, 62, 62, 255))
+    # badge: Arabic only inside the pill, the Latin "HD" gets its own gold chip
+    # (mixing scripts in one bidi run made "HD" jump to the wrong side)
+    ar = shp("مسلسل هيا")
+    aw = int(d.textlength(ar, font=k2))
+    bx0, by0, bx1, by1 = 58, 44, 58 + aw + 150, 92
+    d.rounded_rectangle([bx0, by0, bx1, by1], 12, fill=(10, 13, 20, 215))
+    d.ellipse([bx0 + 18, 61, bx0 + 32, 75], fill=(255, 62, 62, 255))
+    d.text((bx0 + 44, 68), ar, font=k2, fill=(255, 228, 170, 240), anchor="lm")
+    cw = 58
+    d.rounded_rectangle([bx1 - cw - 12, by0 + 8, bx1 - 12, by1 - 8], 8, fill=GOLD + (235,))
+    d.text((bx1 - 12 - cw / 2, 68), "HD", font=k2, fill=(18, 14, 4, 255), anchor="mm")
     d.rounded_rectangle([58, H - 96, 250, H - 52], 12, fill=(243, 198, 75, 235))
     d.text((76, H - 74), "2026", font=k2, fill=(20, 16, 6, 255), anchor="lm")
 
