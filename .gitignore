@@ -1,5 +1,8 @@
 media/work/
 media/work*/
 media/qa/
+media/series/*/out/*_hd.mp4
+media/series/keyart.png
+media/series/poster_wall.png
 __pycache__/
 *.pyc
