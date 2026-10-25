@@ -1,3 +1,5 @@
 media/work/
+media/work*/
+media/qa/
 __pycache__/
 *.pyc

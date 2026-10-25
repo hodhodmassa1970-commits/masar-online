@@ -1,0 +1,76 @@
+# هيا — سلسلة «من حياتها» (Series bible)
+
+كل حلقة تُبنى بنفس المحرّك، بنفس الصوت، وبنفس خيط الهوية البصري. الهدف:
+**ممكن إنتاج حلقة جديدة كاملة (30–60 ثانية، 9:16، صوت + ترجمة + موسيقى) بأمر واحد.**
+
+## 1) ثوابت الهوية (لا تتغيّر في أي حلقة)
+| العنصر | القاعدة |
+|---|---|
+| الوجه | مرجع واحد: `media/reference.jpg` — يُمرَّر دائماً كصورة الإدخال لكل توليد صورة، حتى الطفولة والمراهقة (نفس ملامح العينين والابتسامة، مع تغيير العمر فقط) |
+| صوت هيا | `voice-03` · لهجة شامية ناعمة · المرجع الإلقائي: `media/audio/a2.mp3` — لا يُبدَّل الصوت (انظر `haya_voice.json`) |
+| القلادة | فضية رقيقة بحجر أزرق صغير = **خيط بصري عبر كل العُمر** (تظهر في كل حقبة: الطفولة، الجامعة، الرفض، البناء، المسرح، العودة) |
+| اللوحة اللونية | كريمي/أبيض في الملابس · تدرّج Teal & Gold · حبيبات فيلمية · `vignette PI/4.2` |
+| الإطار | 9:16 ‏(1080×1920) · 30fps · ترجمة بـ Noto Kufi + العناوين الذهبية بـ Amiri |
+| البنية | لقطة/مقطع صوتي واحد لكل مشهد · `LEAD=0.9s` صمت قبل الكلام · تلاشي 0.85s بين المشاهد الحسّاسة، قطع سريع (0.041s) للطاقات العالية |
+
+## 2) الخُطّة (6 حلقات)
+| # | العنوان | الحقبة | اللقطات (ملفات `media/frames/`) | الحالة |
+|---|---|---|---|---|
+| — | **الانطلاقة** (الفيلم الحالي) | المسرح | `s1_run … s7_finale.png` | ✅ `media/haya_shami_vertical.mp4` |
+| E1 | **الدفتر الأول** | الطفولة/المدرسة | `e1_terrace`, `e1_kitchen`, `e1_classroom` | 🔨 جاهز للتوليد |
+| E2 | **السنة الصعبة** | 22 سنة — الرفض | `e2_night` | ✅ صورة مفتاحية |
+| E3 | **البناء** | 27 سنة — الاستوديو الصغير | `e3_studio` | ✅ صورة مفتاحية |
+| E4 | **اثنا عشر شخصاً** | 29 سنة — أول لقاء | `e4_hall` | ⏳ بانتظار توليد (حصة الصور) |
+| E5 | **بعد أن خرج الضوء** | ليلة الانطلاقة، القاعة الفارغة | `e5_after` | ⏳ بانتظار توليد |
+| E6 | **العودة** | بلدتها — ساحة المدرسة | `e6_school` | ⏳ بانتظار توليد |
+
+## 3) إنتاج حلقة
+1. **صور**: `generate_image` مع `images:[media/reference.jpg]` ووصف يحمل: العمر الجديد + القلادة + كريمي + Teal & Gold، وتُحفظ في `media/frames/eN_*.png`.
+2. **صوت**: 2–4 مقاطع `generate_speech` بـ `voice-03` إلى `media/series/eN/a1.mp3 …`.
+3. **إعداد**: `media/series/eN/eN.json` (الحلقة الأولى مثال كامل جاهز) — `seg` للمقاطع و`shots` للمشاهد والنصوص والـ overlays.
+4. **تشغيل**:
+   ```
+   /home/user/.venv/bin/python /home/user/masar-online/media/episode.py \
+       /home/user/masar-online/media/series/e1/e1.json
+   ```
+   الناتج في `media/series/e1/out/`: نسخة HD · نسخة ويب خفيفة · `*_keyart.png` · `*_teaser.gif`.
+
+## 4) قواعد جودة مُثبَّتة في المحرّك (لا تُكسر)
+- طبقات الرسوم تُحفظ **RGBA شفافة**، وإلا يختفي المزج.
+- كل لقطة تُرمَّز بهامش **+3 إطارات** لأن `xfade` عند `offset+duration == نهاية اللقطة الأولى` يقصّ الفيلم.
+- `colorbalance` في النسخة المضمّنة من ffmpeg لا تعرف `ms/hs` — نستخدم `rm/gm/bm/rh/gh/bh/rs/gs/bs` فقط.
+- مستوى الصوت: كسب تلقائي يرفع الكلام إلى ذروة 0.88 والموسيقى 0.30 مع ducking ‏0.4–0.52 · ثم `alimiter 0.97`.
+- الترميز النهائي 1-pass ‏crf 24 للـ 1080×1920 (الحبيبات ترفع الـ bitrate بلا فايدة) + نسخة 540×960 crf 30 للويب.
+
+## 5) ملاحظات
+- كل الوسائط **داخل المستودع** ومدفوعة على الفرع، لأن مساحة العمل تُصفَّر بين الجولات وكل ما خارج المستودع يضيع.
+- `media/work_e*/` مستثنى عبر `.gitignore` (وسائط وسيطة كبيرة).
+
+## Overlay schema (exact keys — verified against build_reel.tiles())
+- `kicker`: `{ "t": "<text>", "a": <start s>, "b": <hold s> }`  (small kufi line, bottom, y=.935)
+- `title`:  `{ "t": "<text>", "line": <int, index into that shot's "lines">, "a": <s before that line>, "hold": <s after> }` (gold Amiri 52, y=.125)
+- `motto`:  `{ "t": "<text>", "a": <start s> }` (Amiri 22, top, y=.095)
+- `endcard`:{ "main": "<text>", "sub": "<text>" }` on the LAST shot only (Amiri 62 y=.36 + kufi 17)
+- `lines`: list of subtitle strings; `|` forces a line break; timing is proportional to
+  a per-line weight `max(6, len + 4*'.' + 7*'!' + 6*'…')` spread over the segment's speech duration.
+
+## Units (do not mix up)
+- `rays` = strength fraction 0.0–1.0 · `conf` = particle COUNT 60–300 · `cx` = crop-band fraction 0–1
+- `z` = [zoom0, zoom1] around 1.00–1.10 · `p` = [px0,py0,px1,py1] pan focal fractions 0–1
+- `tin` = incoming transition overlap: 0.0 first shot, 0.85 dissolve, 0.04 hard cut
+- `seg[]`: `tail` = breathing room after the line, `minimum` = force shot length (only the last shot of a segment)
+
+## Engine bugs fixed (2026-10-25) — already in build_reel.py, do not re-introduce
+- `score()` cue vars renamed `q1/q2/q3` (they shadowed the shaker loop's local `t2` ndarray → "truth value of an array").
+- `final()` audio input indices are now `len(SHOTS)` / `len(SHOTS)+1` (were hardcoded 7/8 → "Invalid file index 7" on a 3-shot episode).
+- poster/teaser seeks clamp to the number of segments; `episode.py` accepts a stage list and auto-prepends `timeline` (so `timeline score final` resumes a render without re-tiling).
+
+## Status (render = full film: hd/web mp4 + poster.jpg + teaser.gif + keyart.png in media/series/eN/out/)
+- pilot `media/haya_shami_vertical.mp4` — DONE, committed.
+- E1 الدفتر الأول — **rendered 37.02 s** (3 shots on `e1_kitchen.png`; terrace + classroom art still missing).
+- E2 السنة الصعبة — **rendered 35.56 s** (3 shots, one plate `e2_night.png`).
+- E3 البناء — **rendered 31.74 s** (`e3_studio.png` ×2 + pilot `s4_heart.png` for the launch night).
+- E4 اثنا عشر شخصاً / E5 بعد أن خرج الضوء / E6 العودة — storyboard in this file, VO + frames NOT yet generated.
+- `generate_image` cap: 10 calls per turn, AND upstream 429s count toward it. Batch 3–4 per turn.
+- TODO: child frames read lighter-haired than Haya — regenerate `e1_kitchen/e1_terrace/e1_classroom`
+  with "same facial identity as the reference, dark brown hair, olive skin" and re-render E1.

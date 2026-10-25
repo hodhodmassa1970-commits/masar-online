@@ -386,25 +386,29 @@ def score():
             clap(max(0., x["start"] - .1) + float(rng.uniform(-.1, 2.2)), .26 * g)
         if x["tin"] > .3:
             riser(max(0., x["start"] - 1.05), 1.05, .5); boom(max(0., x["start"] - .03), .35)
-    boom(SEG[1]["t0"] + .3, .95); riser(max(0., SEG[1]["t0"] - .95), 1.25, .8)
+    q1 = SEG[1]["t0"] if len(SEG) > 1 else SEG[0]["t0"]
+    q2 = SEG[2]["t0"] if len(SEG) > 2 else q1 + 8.0
+    q3 = SEG[3]["t0"] if len(SEG) > 3 else SEG[-1]["t0"]
+    boom(q1 + .3, .95); riser(max(0., q1 - .95), 1.25, .8)
     boom(SHOTS[-1]["send"] + .45, 1.05)
-    b = 60. / 122.; roots = [110., 87.31, 130.81, 98.]; t0m = SEG[1]["t0"]; bars = 8 * b
+    b = 60. / 122.; roots = [110., 87.31, 130.81, 98.]; t0m = q1; bars = 8 * b
     k, t = 0, t0m
     while t < T - 1.2:
         bar = roots[(k // 2) % 4]; en = min(1., max(0., (t - t0m) / 9.))
-        if t > SEG[3]["t0"]: en = 1.
+        if t > q3:
+            en = 1.
         pad([bar, bar * 1.5, bar * 2., bar * 2.5], t, bars * .98, .13 + .13 * en)
         for i in range(8):
             bt = t + i * 2 * b
             if bt > T - 1.3: break
-            if t < SEG[2]["t0"]:
+            if t < q2:
                 if i % 4 == 0: kick(bt, .7)
             else:
                 kick(bt, 1. if i % 2 == 0 else .5)
                 if i % 2 == 1:
                     m = int(.06 * SR); t2 = np.arange(m) / SR
                     add(mus, _bn(m, 3200, 14000, 33) * np.exp(-t2 * 70), bt + b * .5, .26)
-                if t > SEG[3]["t0"] and i % 4 == 3: kick(bt + b * .75, .45)
+                if t > q3 and i % 4 == 3: kick(bt + b * .75, .45)
         k += 1; t += bars
     for f_, g in ((55., .17), (110., .05)):
         add(mus, np.sin(2 * np.pi * f_ * tt + .6 * np.sin(2 * np.pi * .07 * tt)) * np.clip((tt - t0m) / 7., 0, 1), 0, g)
@@ -434,10 +438,11 @@ def final():
                  % (prev, i, dd, SHOTS[i]["start"], nxt)); prev = nxt
     f.append("[vv]fade=t=in:st=0:d=0.85,fade=t=out:st=%.3f:d=1.15,format=yuv420p[v]" % (T - 1.15))
     d, _ = read_wav(os.path.join(B, "speech.wav")); g = min(8., .88 / (np.abs(d).max() + 1e-9))
-    f.append("[7:a]volume=%.3f,acompressor=threshold=0.12:ratio=2.2:attack=8:release=180,"
-             "aformat=sample_fmts=fltp:channel_layouts=stereo[s];[8:a][s]"
+    ia, ib = len(SHOTS), len(SHOTS) + 1        # audio inputs follow the N clip inputs
+    f.append("[%d:a]volume=%.3f,acompressor=threshold=0.12:ratio=2.2:attack=8:release=180,"
+             "aformat=sample_fmts=fltp:channel_layouts=stereo[s];[%d:a][s]"
              "amix=inputs=2:normalize=0,aformat=sample_fmts=fltp:channel_layouts=stereo,"
-             "highpass=f=38,alimiter=limit=0.97:level=false[a]" % g)
+             "highpass=f=38,alimiter=limit=0.97:level=false[a]" % (ia, g, ib))
     out = os.path.join(M, "haya_shami_vertical.mp4")
     run([FF, "-y", "-loglevel", "error"] + inp + ["-i", os.path.join(B, "speech.wav"),
         "-i", os.path.join(B, "score.wav"), "-filter_complex", ";".join(f), "-map", "[v]", "-map", "[a]",
@@ -449,9 +454,10 @@ def final():
          "[0:v]scale=540:960:flags=lanczos,format=yuv420p[v]", "-map", "[v]", "-map", "0:a",
          "-c:v", "libx264", "-preset", "medium", "-crf", "30", "-profile:v", "main", "-level", "3.1",
          "-g", "60", "-c:a", "copy", "-movflags", "+faststart", sm])
-    run([FF, "-y", "-loglevel", "error", "-ss", "%.2f" % (SEG[1]["t0"] + 1.), "-i", out, "-frames:v", "1",
+    pt = (SEG[1]["t0"] if len(SEG) > 1 else SEG[0]["t0"]) + 1.0
+    run([FF, "-y", "-loglevel", "error", "-ss", "%.2f" % pt, "-i", out, "-frames:v", "1",
          "-q:v", "3", os.path.join(M, "haya_poster.jpg")])
-    run([FF, "-y", "-loglevel", "error", "-ss", "%.2f" % (SEG[1]["t0"] + .4), "-t", "7.5", "-i", out,
+    run([FF, "-y", "-loglevel", "error", "-ss", "%.2f" % max(0.0, pt - .6), "-t", "7.5", "-i", out,
          "-vf", "fps=9,scale=300:-1:flags=lanczos,split[a][b];[a]palettegen=32[p];[b][p]"
          "paletteuse=dither=sierra2_4a", os.path.join(M, "haya_intro.gif")])
     for p in (out, sm, os.path.join(M, "haya_poster.jpg"), os.path.join(M, "haya_intro.gif")):
