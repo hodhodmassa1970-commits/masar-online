@@ -22,7 +22,8 @@ sys.path.insert(0, MEDIA)
 cfg_path = os.path.abspath(sys.argv[1] if len(sys.argv) > 1 else os.path.join(MEDIA, "series/e1/e1.json"))
 cfg = json.load(open(cfg_path, encoding="utf-8"))
 slug = cfg.get("slug") or os.path.basename(os.path.dirname(cfg_path))
-work = os.environ.get("WORK") or os.path.join(MEDIA, "work_" + slug)
+sfx = "_land" if os.environ.get("AR", "").startswith("16") else ""
+work = os.environ.get("WORK") or os.path.join(MEDIA, "work_" + slug + sfx)
 os.makedirs(work, exist_ok=True)
 os.environ["WORK"] = work                      # read by build_reel at import time
 
@@ -58,11 +59,13 @@ for stage in stages:
     getattr(br, stage)()
 
 dst = os.path.join(os.path.dirname(cfg_path), "out")
-shutil.rmtree(dst, ignore_errors=True)
 os.makedirs(dst, exist_ok=True)
-names = {"haya_shami_vertical.mp4": "%s_%s.mp4" % (slug, "hd"),
-         "haya_shami_vertical_small.mp4": "%s_%s.mp4" % (slug, "web"),
-         "haya_poster.jpg": slug + "_poster.jpg", "haya_intro.gif": slug + "_teaser.gif"}
+for f in os.listdir(dst):                      # refresh only this format's own outputs
+    if f.startswith(slug + sfx):
+        os.remove(os.path.join(dst, f))
+names = {"haya_shami_vertical.mp4": "%s%s_hd.mp4" % (slug, sfx),
+         "haya_shami_vertical_small.mp4": "%s%s_web.mp4" % (slug, sfx),
+         "haya_poster.jpg": slug + sfx + "_poster.jpg", "haya_intro.gif": slug + sfx + "_teaser.gif"}
 for a, b in names.items():
     src = os.path.join(tmp, a)
     if os.path.exists(src):
@@ -77,13 +80,19 @@ for x in shots:
     p = os.path.join(br.FR, x["f"])
     im = Image.open(p).convert("RGB")
     w, h = br.W, br.H
-    bw = int(round(h * 9 / 16)); x0 = min(max(0, int(w * x.get("cx", .5)) - bw // 2), w - bw)
-    im = im.crop((x0, 0, x0 + bw, h)).resize((cw, int(cw * 16 / 9)), Image.LANCZOS)
+    if w > h:                                   # 16:9 contact sheet
+        bw = min(im.width, int(round(im.height * 16 / 9)))
+        x0 = min(max(0, int(im.width * x.get("cx", .5)) - bw // 2), im.width - bw)
+        im = im.crop((x0, 0, x0 + bw, im.height)).resize((cw, int(cw * 9 / 16)), Image.LANCZOS)
+    else:
+        bw = int(round(im.height * 9 / 16)); x0 = min(max(0, int(im.width * x.get("cx", .5)) - bw // 2), im.width - bw)
+        im = im.crop((x0, 0, x0 + bw, im.height)).resize((cw, int(cw * 16 / 9)), Image.LANCZOS)
     tiles.append(im)
-sheet = Image.new("RGB", (cw * len(tiles), int(cw * 16 / 9)), (10, 12, 18))
+phh = int(cw * (9 / 16 if w > h else 16 / 9))
+sheet = Image.new("RGB", (cw * len(tiles), phh), (10, 12, 18))
 for i, t in enumerate(tiles):
     sheet.paste(t, (i * cw, 0))
-sp = os.path.join(dst, slug + "_keyart.png")
+sp = os.path.join(dst, slug + sfx + "_keyart.png")
 sheet.save(sp)
 print("  → media/%s" % os.path.relpath(sp, MEDIA))
 print("\nepisode %s done · %.2fs" % (slug, json.load(open(os.path.join(work, "tl.json")))["total"]))

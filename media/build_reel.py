@@ -10,7 +10,7 @@ Outputs: media/haya_shami_vertical.mp4        (1080x1920, master)
 """
 import os, sys, json, math, wave, subprocess, shutil
 import numpy as np
-from PIL import Image, ImageDraw, ImageFont, ImageFilter
+from PIL import Image, ImageDraw, ImageFont, ImageFilter, ImageEnhance
 import arabic_reshaper
 from bidi.algorithm import get_display
 import imageio_ffmpeg
@@ -21,7 +21,15 @@ FR, AU, B = os.path.join(M, "frames"), os.path.join(M, "audio"), \
     os.environ.get("WORK") or os.path.join(M, "work")
 os.makedirs(B, exist_ok=True)
 SR, FPS, TFPS = 48000, 30, 12
-W, H, TW, TH = 1080, 1920, 540, 960
+AR = os.environ.get("AR", "9:16")                       # "9:16" (default) or "16:9"
+LAND = AR.startswith("16")
+W, H, TW, TH = (1920, 1080, 960, 540) if LAND else (1080, 1920, 540, 960)
+TS = .72 if LAND else 1.0        # type sizes scale with the shorter edge of the frame
+
+
+def ts(px):
+    return max(11, int(round(px * TS)))
+
 CUT, DISS, LEAD = 0.041, 0.85, 0.9
 KUF = os.environ.get("KUF") or (os.path.join(M, "NotoKufi.ttf")
         if os.path.exists(os.path.join(M, "NotoKufi.ttf")) else "/home/user/fonts/NotoKufi.ttf")
@@ -132,7 +140,7 @@ def bugs():
     d.ellipse([22, 14 + h // 2 - 4, 30, 14 + h // 2 + 4], fill=(255, 62, 62, 255))
     d.text([38, 14 + int(h * .3)], "LIVE · REEL", font=ImageFont.truetype(KUF, f), fill=(242, 242, 246, 228))
     d.rounded_rectangle([TW - 118, 14, TW - 14, 14 + h], 7, fill=(10, 12, 18, 130))
-    d.text([TW - 108, 14 + int(h * .3)], "9:16 · 1080", font=ImageFont.truetype(KUF, f),
+    d.text([TW - 108, 14 + int(h * .3)], "%s · 1080" % AR, font=ImageFont.truetype(KUF, f),
            fill=(255, 228, 170, 230))
     return l
 
@@ -184,9 +192,30 @@ def rays(strength=1., seed=7, n=4):
 def prep():
     for x in SHOTS:
         im = Image.open(os.path.join(FR, x["f"])).convert("RGB")
-        sw, sh = im.size; bw = int(round(sh * 9 / 16))
-        x0 = min(max(0, int(sw * x["cx"]) - bw // 2), sw - bw)
-        im = im.crop((x0, 0, x0 + bw, sh)).resize((W * 2, H * 2), Image.LANCZOS)
+        sw, sh = im.size
+        if not LAND:                                   # 9:16: crop the vertical band
+            bw = int(round(sh * 9 / 16))
+            x0 = min(max(0, int(sw * x["cx"]) - bw // 2), sw - bw)
+            im = im.crop((x0, 0, x0 + bw, sh)).resize((W * 2, H * 2), Image.LANCZOS)
+        elif sw / sh >= 1.7:                           # 16:9 out of a wide plate: full width
+            bw = min(sw, int(round(sh * 16 / 9)))
+            x0 = min(max(0, int(sw * x["cx"]) - bw // 2), sw - bw)
+            im = im.crop((x0, 0, x0 + bw, sh)).resize((W * 2, H * 2), Image.LANCZOS)
+        else:                                          # 16:9 from a tall plate: panel + blur fill
+            sc = max(W * 2 / sw, H * 2 / sh)
+            bg = im.resize((int(sw * sc), int(sh * sc)), Image.LANCZOS)
+            bx, by = (bg.width - W * 2) // 2, (bg.height - H * 2) // 2
+            bg = bg.crop((bx, by, bx + W * 2, by + H * 2)).filter(ImageFilter.GaussianBlur(38))
+            bg = ImageEnhance.Brightness(bg).enhance(.60)
+            bg = ImageEnhance.Color(bg).enhance(.90)
+            pw, ph = int(round(H * 2 * sw / sh)), H * 2
+            pan = im.resize((pw, ph), Image.LANCZOS)
+            px = min(max(0, int((W * 2 - pw) * (.5 + (x["cx"] - .5) * 2))), W * 2 - pw)
+            sd = Image.new("L", (W * 2, H * 2), 0)
+            ImageDraw.Draw(sd).rectangle([px + 14, 8, px + pw + 26, H * 2 + 16], fill=115)
+            bg.paste((5, 7, 11), (0, 0), sd.filter(ImageFilter.GaussianBlur(24)))
+            bg.paste(pan, (px, 0))
+            im = bg
         im = im.filter(ImageFilter.UnsharpMask(radius=3.0, percent=115, threshold=2))
         x["master"] = os.path.join(B, "m%d.png" % x["i"]); im.save(x["master"])
     print("prep ok")
@@ -239,29 +268,29 @@ def tiles():
         nf = int(round(x["dur"] * TFPS)) + 1
         P = parts(x["conf"], 501 + 37 * x["i"]); K = bokeh(16, 17 + x["i"])
         R1 = rays(x["rays"], 31 + x["i"]); R2 = rays(x["rays"] * .8, 71 + x["i"], 3); LBL = bugs()
-        SUB = {s: text_layer(s, KUF, 27, (255, 255, 255, 252), max_w=int(TW * .9), stroke=2,
+        SUB = {s: text_layer(s, KUF, ts(27), (255, 255, 255, 252), max_w=int(TW * .9), stroke=2,
                              sf=(4, 6, 12, 240), glow=(0, 0, 0, 150), gs=7, y=.815) for s, a, b in x["lg"]}
         ex = []
         if "kicker" in x:
             k = x["kicker"]
-            ex.append((text_layer(shape(k["t"]), KUF, 15, (255, 238, 196, 240), max_w=int(TW * .84),
+            ex.append((text_layer(shape(k["t"]), KUF, ts(15), (255, 238, 196, 240), max_w=int(TW * .84),
                                   stroke=1, sf=(0, 0, 0, 190), y=.935), k["a"], k["b"], .5))
         if "title" in x:
             t = x["title"]; ln = x["lg"][t["line"]]
-            ex.append((text_layer(shape(t["t"]), AMI, 52, GOLD + (255,), max_w=int(TW * .82), stroke=2,
+            ex.append((text_layer(shape(t["t"]), AMI, ts(52), GOLD + (255,), max_w=int(TW * .82), stroke=2,
                                   sf=GLO + (255,), glow=(255, 205, 95, 220), gs=13, grad=(GHI, GLO), y=.125),
                        max(0., ln[1] - x["start"] - t["a"]), ln[2] - x["start"] + t["hold"], .55))
         if "motto" in x:
             m = x["motto"]
-            ex.append((text_layer(shape(m["t"]), AMI, 22, GOLD + (238,), max_w=int(TW * .84), stroke=1,
+            ex.append((text_layer(shape(m["t"]), AMI, ts(22), GOLD + (238,), max_w=int(TW * .84), stroke=1,
                                   sf=(8, 8, 12, 215), glow=(255, 200, 90, 140), gs=10, y=.095),
                        m["a"], x["dur"] - .3, .8))
         if "endcard" in x:
             e = x["endcard"]; t0 = x["send"] - x["start"] + .5
-            ex.append((text_layer(shape(e["main"]), AMI, 62, GOLD + (255,), max_w=int(TW * .82), stroke=2,
+            ex.append((text_layer(shape(e["main"]), AMI, ts(62), GOLD + (255,), max_w=int(TW * .82), stroke=2,
                                   sf=GLO + (255,), glow=(255, 208, 100, 235), gs=15, grad=(GHI, GLO), y=.36),
                        t0, x["dur"], .7))
-            ex.append((text_layer(shape(e["sub"]), KUF, 17, (246, 246, 248, 242), max_w=int(TW * .8),
+            ex.append((text_layer(shape(e["sub"]), KUF, ts(17), (246, 246, 248, 242), max_w=int(TW * .8),
                                   stroke=1, sf=(0, 0, 0, 215), y=.455), t0 + .35, x["dur"], .7))
             rl = Image.new("RGBA", (TW, TH), (0, 0, 0, 0))
             ImageDraw.Draw(rl).rectangle([int(TW * .3), int(TH * .416), int(TW * .7), int(TH * .416) + 2],
@@ -451,14 +480,14 @@ def final():
         "+faststart", "-shortest", out])
     sm = os.path.join(M, "haya_shami_vertical_small.mp4")
     run([FF, "-y", "-loglevel", "error", "-i", out, "-filter_complex",
-         "[0:v]scale=540:960:flags=lanczos,format=yuv420p[v]", "-map", "[v]", "-map", "0:a",
+         "[0:v]scale=%d:%d:flags=lanczos,format=yuv420p[v]" % (W // 2, H // 2), "-map", "[v]", "-map", "0:a",
          "-c:v", "libx264", "-preset", "medium", "-crf", "30", "-profile:v", "main", "-level", "3.1",
          "-g", "60", "-c:a", "copy", "-movflags", "+faststart", sm])
     pt = (SEG[1]["t0"] if len(SEG) > 1 else SEG[0]["t0"]) + 1.0
     run([FF, "-y", "-loglevel", "error", "-ss", "%.2f" % pt, "-i", out, "-frames:v", "1",
          "-q:v", "3", os.path.join(M, "haya_poster.jpg")])
     run([FF, "-y", "-loglevel", "error", "-ss", "%.2f" % max(0.0, pt - .6), "-t", "7.5", "-i", out,
-         "-vf", "fps=9,scale=300:-1:flags=lanczos,split[a][b];[a]palettegen=32[p];[b][p]"
+         "-vf", ("fps=9,scale=%d:-1:flags=lanczos" % (430 if LAND else 300)) + ",split[a][b];[a]palettegen=32[p];[b][p]"
          "paletteuse=dither=sierra2_4a", os.path.join(M, "haya_intro.gif")])
     for p in (out, sm, os.path.join(M, "haya_poster.jpg"), os.path.join(M, "haya_intro.gif")):
         print("%-46s %6.2f MB" % (os.path.basename(p), os.path.getsize(p) / 1e6))
