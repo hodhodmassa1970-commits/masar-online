@@ -141,3 +141,16 @@ that folder), so the pilot renders in either format too.
 Fast re-cut trick: when only framing changed, run `… <e>.json timeline prep clips speech score final`
 — the 960x540 tiles are still valid, which cuts ~40% of the render time.
 `media/recap.py` accepts `RECAP_LAND=1 RECAP_EPS=g1,e0,pilot RECAP_SFX=_land RECAP_OUT=… RECAP_WALL=…`.
+
+## Ops notes (hard-won, 2026-10-25/26)
+- The sandbox is wiped roughly every 1-2 h (`/home/user/.venv` and every untracked file die with it).
+  Long render batches MUST `git add && commit && push` after **each** episode — that is why
+  `batch_land3.sh` commits per-episode; after a wipe, `git fetch && git reset --hard FETCH_HEAD`
+  plus a venv rebuild brings everything back in ~40 s.
+- After a wipe, resume a landscape batch with the episode list, e.g.
+  `EPS="e3 e4 e5 e6" bash media/series/batch_land3.sh`.
+- 2 cores only: a 3-shot 16:9 episode ≈ 9 min (tiles 5, clips 3, final 1.5). Do not run two lanes.
+- `media/recap_frame.py` now derives `haya_<ep>` from the folder name, so it works for every episode
+  (it used to hold a 3-item dict and crashed with KeyError on e1).
+- Landscape wall/strip: `RECAP_LAND=1 RECAP_EPS=<list> RECAP_SFX=_land RECAP_OUT=haya_land_recap.gif
+  RECAP_WALL=land_wall python media/recap.py` — re-run it as episodes land; it skips missing ones.
