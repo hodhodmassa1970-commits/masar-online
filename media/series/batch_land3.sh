@@ -4,7 +4,7 @@
 cd /home/user/masar-online || exit 1
 export AR=16:9
 PY=/home/user/.venv/bin/python
-for e in e1 e2 e3 e4 e5 e6; do
+for e in ${EPS:-e1 e2 e3 e4 e5 e6}; do
   echo "@@START $e $(date +%H:%M:%S)"
   $PY media/episode.py media/series/$e/$e.json > /tmp/land3_$e.log 2>&1
   if [ $? -eq 0 ]; then
