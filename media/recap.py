@@ -3,7 +3,7 @@
 """Builds the series recap: a poster wall (PNG) and an animated recap strip (GIF)
    that samples two frames from every finished episode.
    python media/recap.py"""
-import os, subprocess, glob
+import os, math, subprocess, glob
 from PIL import Image, ImageDraw, ImageFont
 import arabic_reshaper
 from bidi.algorithm import get_display
@@ -73,7 +73,9 @@ def label(img, tag, ttl, extra=""):
 
 def main():
     eps = [e for e in EPS if not ONLY or e[0] in ONLY]
-    rows, cols = (1, len(eps)) if LAND and len(eps) <= 4 else (2, 4)
+    n = len(eps)
+    cols = min(4, n) or 1
+    rows = max(1, math.ceil(n / cols)) if n > 4 else (1 if LAND else 2)
     wall = Image.new("RGB", (cols * PW, rows * (PH + LAB)), (9, 11, 16))
     frames = []
     for i, (slug, tag, ttl, dur) in enumerate(eps):
