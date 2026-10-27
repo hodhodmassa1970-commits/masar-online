@@ -154,3 +154,22 @@ Fast re-cut trick: when only framing changed, run `… <e>.json timeline prep cl
   (it used to hold a 3-item dict and crashed with KeyError on e1).
 - Landscape wall/strip: `RECAP_LAND=1 RECAP_EPS=<list> RECAP_SFX=_land RECAP_OUT=haya_land_recap.gif
   RECAP_WALL=land_wall python media/recap.py` — re-run it as episodes land; it skips missing ones.
+
+## Brand opener — `media/brand/` (4.2 s, both formats)
+`opener.py` draws the sting with the film engine itself: darkened `frames/s4_heart.png` plate (brightness
+.47) + `rays()` sweep + `confetti()/bokeh()` + gold Amiri logotype **أميرة الجماهير** over an expanding
+gold rule, kicker «مسلسل هيا» first, sub-line «ثماني حلقات من حكايتها» last; then the same grade chain
+as `clips()` (eq → colorbalance → vignette PI/4.2 → noise → unsharp) so it never looks pasted on.
+Cue (`cue()`) is synthesized at 122 BPM: sub pad 55/110/164.8 Hz, noise riser to t=.78, soft 96 Hz
+impact exactly when the logotype lands, bell arpeggio on the 8ths, and a −0.28 s fade so the film's own
+music starts clean.  Timeline (s): .30 kicker · .62 logo (zoom 1.07→1.00) · .95 rule · 1.35 sub · 3.72 fade-out.
+Run `python media/brand/opener.py` (writes `opener_vert.mp4`) and `AR=16:9 …` (writes `opener_land.mp4`).
+
+`attach.py <film.mp4>…` (or `--all`) prepends the opener, probing each target's own size/fps and
+matching the opener to it → `<name>_op.mp4` next to the source (nothing overwritten).
+Opened cuts exist for all 9 films in both formats: `haya_<ep>_web_op.mp4`, `haya_<ep>_land_web_op.mp4`.
+HD opened versions are not committed (gitignored) — regenerate with the same script pointed at the HD file.
+
+Repo housekeeping: `media/brand/work/` (the 126 PNG frames) is scratch and gitignored — delete after runs;
+the pack is ~400 MiB, so if it ever needs trimming, the first candidates are the un-opened `_web.mp4`
+duplicates or the per-episode `*_keyart.png` (superseded by `media/series/land_wall.jpg` + `keyart.jpg`).
