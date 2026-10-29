@@ -96,13 +96,13 @@
   </div>
 
   <!-- Scene 1: greeting (0-5s) -->
-  <section class="scene hello" data-duration="5000">
+  <section class="scene hello" data-duration="5000" data-audio="audio/narration-01-greeting.mp3">
     <h1>قرّة عيوننا ومتابعينا</h1>
     <div class="tag">هنا طرطوس · صباح الخير من أيام وردية</div>
   </section>
 
   <!-- Scene 2: Tartus forecast (5-17s) -->
-  <section class="scene" data-duration="12000">
+  <section class="scene" data-duration="12000" data-audio="audio/narration-02-forecast.mp3">
     <div class="city">طرطوس والساحل</div>
     <div class="cards">
       <div class="card"><div class="icon"><span class="sun">☀️</span></div><div class="val">25–27°C</div><div class="lbl">الحرارة</div></div>
@@ -114,7 +114,7 @@
   </section>
 
   <!-- Scene 3: mountain (17-25s) -->
-  <section class="scene" data-duration="8000">
+  <section class="scene" data-duration="8000" data-audio="audio/narration-03-mountain.mp3">
     <div class="big">أما بالجبل، الطقس أبرد قليلاً<br><span class="gold">بيلبق لشغل الزيتون</span></div>
     <div class="row">
       <div><div class="olive">🫒</div>شغل الزيتون</div>
@@ -129,7 +129,7 @@
   </section>
 
   <!-- Scene 4: sign-off (25-30s) -->
-  <section class="scene bye" data-duration="5000">
+  <section class="scene bye" data-duration="5000" data-audio="audio/narration-04-signoff.mp3">
     <div class="smile">😊</div>
     <h1>ضلّوا تبتسموا</h1>
     <div class="tag" style="font-size:56px;margin-top:20px;">نهاركم سعيد · باي باي!</div>
@@ -150,7 +150,7 @@
   const progress = document.getElementById('progress');
   const total = scenes.reduce((s, el) => s + +el.dataset.duration, 0);
   const stage = document.getElementById('stage');
-  let timers = [], startTime = 0, raf = null;
+  let timers = [], startTime = 0, raf = null, audioEls = [];
 
   function fit() {
     const s = Math.min(innerWidth / 1920, innerHeight / 1080);
@@ -168,6 +168,8 @@
         scenes.forEach(x => x.classList.remove('active'));
         void s.offsetWidth; // restart CSS animations
         s.classList.add('active');
+        audioEls.forEach(a => { a.pause(); a.currentTime = 0; });
+        if (s.dataset.audio) { const a = new Audio(s.dataset.audio); audioEls.push(a); a.play().catch(() => {}); }
       }, start));
       t += d;
     });
@@ -179,6 +181,7 @@
   }
   function stop() {
     timers.forEach(clearTimeout); timers = [];
+    audioEls.forEach(a => { a.pause(); }); audioEls = [];
     if (raf) cancelAnimationFrame(raf);
   }
   document.getElementById('play').onclick = play;
