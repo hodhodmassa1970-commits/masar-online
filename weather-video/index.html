@@ -23,7 +23,7 @@
   @keyframes drift { from { transform: translateX(0); } to { transform: translateX(2600px); } }
 
   .scene { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; pointer-events: none; }
-  .scene.active { animation: sceneIn .8s ease forwards, sceneOut .8s ease forwards; }
+  .scene.active { animation: sceneIn .8s ease forwards; }
   @keyframes sceneIn { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: none; } }
   @keyframes sceneOut { from { opacity: 1; } to { opacity: 0; } }
 
