@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>طقس طرطوس - أيام وردية</title>
+<style>
+  /* 1920x1080 composition, scaled to fit the viewport */
+  :root { --blue:#0b3d91; --blue2:#1e88e5; --sky:#8fd3ff; --gold:#f5b942; --white:#fff; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; background: #05112a; overflow: hidden; font-family: "Noto Naskh Arabic", "Noto Sans Arabic", Tahoma, sans-serif; }
+
+  #stage { position: absolute; top: 50%; left: 50%; width: 1920px; height: 1080px; transform-origin: center; overflow: hidden; background: linear-gradient(160deg, #0b3d91 0%, #1e88e5 60%, #8fd3ff 100%); color: var(--white); }
+
+  /* drifting clouds */
+  .cloud { position: absolute; width: 420px; height: 140px; background: rgba(255,255,255,.18); border-radius: 200px; filter: blur(2px); animation: drift 30s linear infinite; }
+  .cloud::before, .cloud::after { content: ""; position: absolute; background: inherit; border-radius: 50%; }
+  .cloud::before { width: 180px; height: 180px; top: -70px; left: 60px; }
+  .cloud::after { width: 130px; height: 130px; top: -45px; right: 70px; }
+  .c1 { top: 120px; left: -400px; }
+  .c2 { top: 620px; left: -600px; animation-duration: 42s; animation-delay: -10s; }
+  .c3 { top: 380px; left: -300px; animation-duration: 36s; animation-delay: -20s; opacity: .6; }
+  @keyframes drift { from { transform: translateX(0); } to { transform: translateX(2600px); } }
+
+  .scene { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; pointer-events: none; }
+  .scene.active { animation: sceneIn .8s ease forwards, sceneOut .8s ease forwards; }
+  @keyframes sceneIn { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: none; } }
+  @keyframes sceneOut { from { opacity: 1; } to { opacity: 0; } }
+
+  .brand { position: absolute; top: 56px; right: 80px; display: flex; align-items: center; gap: 18px; }
+  .brand .logo { width: 84px; height: 84px; border-radius: 50%; background: conic-gradient(#ff6b6b, #f5b942, #6bd96b, #3aa0ff, #ff6b6b); }
+  .brand .name { font-size: 48px; font-weight: 700; }
+  .brand .sub { font-size: 26px; opacity: .85; }
+  .lower-third { position: absolute; bottom: 60px; left: 80px; right: 80px; height: 110px; background: rgba(5,17,42,.7); border-right: 8px solid var(--gold); border-radius: 14px; display: flex; align-items: center; padding: 0 40px; font-size: 40px; font-weight: 700; }
+
+  h1 { font-size: 132px; font-weight: 800; text-shadow: 0 8px 30px rgba(0,0,0,.25); }
+  .big { font-size: 96px; font-weight: 700; line-height: 1.5; text-align: center; max-width: 1500px; }
+  .gold { color: var(--gold); }
+
+  /* Scene 1: greeting */
+  .hello h1 { animation: pop 1s cubic-bezier(.2,1.4,.4,1) both; }
+  .hello .tag { margin-top: 30px; font-size: 56px; opacity: 0; animation: fadeUp 1s .6s ease forwards; }
+  @keyframes pop { from { transform: scale(.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  @keyframes fadeUp { from { transform: translateY(30px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+  /* Scene 2: Tartus forecast */
+  .city { font-size: 120px; font-weight: 800; color: var(--gold); }
+  .cards { display: flex; gap: 60px; margin-top: 50px; }
+  .card { width: 480px; padding: 50px 30px; border-radius: 28px; background: rgba(255,255,255,.14); backdrop-filter: blur(6px); text-align: center; opacity: 0; transform: translateY(40px); }
+  .scene.active .card { animation: fadeUp .8s ease forwards; }
+  .scene.active .card:nth-child(2) { animation-delay: .25s; }
+  .scene.active .card:nth-child(3) { animation-delay: .5s; }
+  .card .icon { font-size: 110px; line-height: 1.2; }
+  .card .val { font-size: 84px; font-weight: 800; direction: ltr; }
+  .card .lbl { font-size: 38px; opacity: .9; margin-top: 10px; }
+  .sun { display: inline-block; animation: spin 12s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .temp-bar { width: 1100px; height: 18px; border-radius: 9px; background: rgba(255,255,255,.2); margin-top: 60px; overflow: hidden; }
+  .temp-bar span { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--gold), #ff8a3d); animation: grow 2s .4s ease forwards; }
+  @keyframes grow { to { width: 70%; } }
+  .temp-label { margin-top: 20px; font-size: 44px; direction: ltr; }
+
+  /* Scene 3: mountain */
+  .mountain { position: absolute; bottom: 0; left: 0; right: 0; height: 420px; }
+  .mountain svg { width: 100%; height: 100%; }
+  .olive { font-size: 130px; }
+  .mate { font-size: 130px; }
+  .row { display: flex; gap: 90px; align-items: center; margin-top: 40px; }
+  .row div { text-align: center; font-size: 46px; }
+
+  /* Scene 4: sign-off */
+  .bye h1 { font-size: 150px; }
+  .bye .smile { font-size: 160px; animation: bounce 1.6s ease-in-out infinite; }
+  @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-30px); } }
+
+  /* progress bar */
+  #progress { position: absolute; bottom: 0; left: 0; height: 10px; width: 0; background: var(--gold); }
+
+  /* controls (outside composition) */
+  #controls { position: fixed; bottom: 16px; left: 16px; display: flex; gap: 10px; z-index: 10; font-family: Tahoma, sans-serif; }
+  #controls button { padding: 10px 18px; border: 0; border-radius: 8px; background: #f5b942; color: #05112a; font-weight: 700; cursor: pointer; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="cloud c1"></div>
+  <div class="cloud c2"></div>
+  <div class="cloud c3"></div>
+
+  <div class="brand">
+    <div class="logo"></div>
+    <div>
+      <div class="name">أيام وردية</div>
+      <div class="sub">Weather Hub · نشرة الطقس</div>
+    </div>
+  </div>
+
+  <!-- Scene 1: greeting (0-5s) -->
+  <section class="scene hello" data-duration="5000">
+    <h1>قرّة عيوننا ومتابعينا</h1>
+    <div class="tag">هنا طرطوس · صباح الخير من أيام وردية</div>
+  </section>
+
+  <!-- Scene 2: Tartus forecast (5-17s) -->
+  <section class="scene" data-duration="12000">
+    <div class="city">طرطوس والساحل</div>
+    <div class="cards">
+      <div class="card"><div class="icon"><span class="sun">☀️</span></div><div class="val">25–27°C</div><div class="lbl">الحرارة</div></div>
+      <div class="card"><div class="icon">⛅</div><div class="val">غائم جزئياً</div><div class="lbl">السماء</div></div>
+      <div class="card"><div class="icon">🍃</div><div class="val">خفيف وعليل</div><div class="lbl">الهواء</div></div>
+    </div>
+    <div class="temp-bar"><span></span></div>
+    <div class="temp-label">Tartus · Coastal Region</div>
+  </section>
+
+  <!-- Scene 3: mountain (17-25s) -->
+  <section class="scene" data-duration="8000">
+    <div class="big">أما بالجبل، الطقس أبرد قليلاً<br><span class="gold">بيلبق لشغل الزيتون</span></div>
+    <div class="row">
+      <div><div class="olive">🫒</div>شغل الزيتون</div>
+      <div><div class="mate">🧉</div>كباية متة دافية</div>
+    </div>
+    <div class="mountain">
+      <svg viewBox="0 0 1920 420" preserveAspectRatio="none">
+        <path d="M0,420 L0,260 L260,120 L480,240 L700,80 L980,250 L1200,130 L1480,260 L1700,110 L1920,220 L1920,420 Z" fill="#0b2a63" opacity=".9"/>
+        <path d="M0,420 L0,330 L320,250 L600,340 L900,270 L1250,350 L1600,280 L1920,340 L1920,420 Z" fill="#06203f"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- Scene 4: sign-off (25-30s) -->
+  <section class="scene bye" data-duration="5000">
+    <div class="smile">😊</div>
+    <h1>ضلّوا تبتسموا</h1>
+    <div class="tag" style="font-size:56px;margin-top:20px;">نهاركم سعيد · باي باي!</div>
+  </section>
+
+  <div class="lower-third" id="lower" style="display:none"></div>
+  <div id="progress"></div>
+</div>
+
+<div id="controls">
+  <button id="play">تشغيل / Play</button>
+  <button id="restart">إعادة</button>
+</div>
+
+<script>
+  // Sequential scene timeline driven by data-duration (ms)
+  const scenes = [...document.querySelectorAll('.scene')];
+  const progress = document.getElementById('progress');
+  const total = scenes.reduce((s, el) => s + +el.dataset.duration, 0);
+  const stage = document.getElementById('stage');
+  let timers = [], startTime = 0, raf = null;
+
+  function fit() {
+    const s = Math.min(innerWidth / 1920, innerHeight / 1080);
+    stage.style.transform = `translate(-50%, -50%) scale(${s})`;
+  }
+  addEventListener('resize', fit); fit();
+
+  function play() {
+    stop();
+    scenes.forEach(s => s.classList.remove('active'));
+    let t = 0;
+    scenes.forEach(s => {
+      const d = +s.dataset.duration, start = t;
+      timers.push(setTimeout(() => {
+        scenes.forEach(x => x.classList.remove('active'));
+        void s.offsetWidth; // restart CSS animations
+        s.classList.add('active');
+      }, start));
+      t += d;
+    });
+    startTime = performance.now();
+    (function tick() {
+      progress.style.width = Math.min(100, (performance.now() - startTime) / total * 100) + '%';
+      if (performance.now() - startTime < total) raf = requestAnimationFrame(tick);
+    })();
+  }
+  function stop() {
+    timers.forEach(clearTimeout); timers = [];
+    if (raf) cancelAnimationFrame(raf);
+  }
+  document.getElementById('play').onclick = play;
+  document.getElementById('restart').onclick = () => { stop(); progress.style.width = '0'; scenes.forEach(s => s.classList.remove('active')); play(); };
+</script>
+</body>
+</html>
