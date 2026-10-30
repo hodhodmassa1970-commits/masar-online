@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ستيكرات هيا | معكم هيا</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --pink:#FF8FC0; --pink-soft:#FFE3F0; --pink-deep:#E8559B;
+    --plum:#4A203D; --cream:#FFF8F2; --lav:#C6B2FF;
+  }
+  body{
+    font-family:'Cairo',sans-serif; background:
+      radial-gradient(1200px 600px at 80% -10%, #FFE3F0 0%, transparent 60%),
+      radial-gradient(900px 500px at 0% 20%, #F1E9FF 0%, transparent 55%),
+      var(--cream);
+    color:var(--plum); min-height:100vh; padding:0 0 70px;
+  }
+  .heart{position:fixed;opacity:.5;pointer-events:none;animation:float 7s ease-in-out infinite}
+  @keyframes float{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-16px) rotate(8deg)}}
+
+  header{padding:56px 22px 18px;text-align:center;position:relative;z-index:2}
+  .badge{
+    display:inline-flex;align-items:center;gap:8px;background:#fff;border:2px solid var(--pink-soft);
+    color:var(--pink-deep);font-weight:800;font-size:.95rem;padding:8px 20px;border-radius:50px;
+    box-shadow:0 8px 24px rgba(232,85,155,.13);margin-bottom:20px;
+  }
+  h1{
+    font-size:clamp(2.1rem,6vw,3.6rem);font-weight:900;line-height:1.25;
+    background:linear-gradient(120deg,var(--pink-deep),#B37CF0 55%,#FF9A6C);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .cover{
+    width:min(72vw,230px);border-radius:28px;display:block;margin:0 auto 22px;
+    box-shadow:0 18px 44px rgba(232,85,155,.28);border:4px solid #fff;transform:rotate(-2.5deg);
+    transition:transform .35s;
+  }
+  .cover:hover{transform:rotate(0) scale(1.03)}
+  header p{margin-top:14px;font-size:1.05rem;font-weight:600;color:#7A5B70;line-height:1.9;max-width:640px;margin-inline:auto}
+  .actions{margin-top:26px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+  .btn{
+    text-decoration:none;font-weight:800;font-size:1rem;padding:14px 30px;border-radius:50px;
+    transition:transform .25s,box-shadow .25s,border-color .25s;display:inline-flex;align-items:center;gap:10px;
+  }
+  .btn-primary{background:linear-gradient(135deg,var(--pink),#B37CF0);color:#fff;box-shadow:0 12px 26px rgba(232,85,155,.32)}
+  .btn-primary:hover{transform:translateY(-3px);box-shadow:0 18px 34px rgba(232,85,155,.42)}
+  .btn-ghost{background:#fff;color:var(--plum);border:2px solid var(--pink-soft)}
+  .btn-ghost:hover{transform:translateY(-3px);border-color:var(--pink)}
+
+  .grid{
+    max-width:1180px;margin:46px auto 0;padding:0 20px;
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:26px;
+  }
+  .card{
+    background:#fff;border-radius:28px;padding:16px 16px 18px;text-align:center;
+    box-shadow:0 10px 30px rgba(180,120,170,.12);border:2px solid #FFF0F7;
+    transition:transform .3s,box-shadow .3s,border-color .3s;position:relative;overflow:hidden;
+  }
+  .card:hover{transform:translateY(-8px);box-shadow:0 22px 40px rgba(180,120,170,.22);border-color:var(--pink-soft)}
+  .card .art{
+    border-radius:22px;padding:10px;background:
+      linear-gradient(180deg,#FFF6FA,#F6F0FF);cursor:pointer;
+  }
+  .card .art img{width:100%;display:block;border-radius:16px;transition:transform .3s}
+  .card:hover .art img{transform:scale(1.04)}
+  .card h3{font-size:1.18rem;font-weight:800;margin:14px 0 4px}
+  .card .cap{font-size:.82rem;color:#9A7E93;font-weight:600;margin-bottom:12px}
+  .dl{
+    display:flex;gap:8px;justify-content:center;
+  }
+  .dl a{
+    font-size:.8rem;font-weight:800;text-decoration:none;color:var(--pink-deep);
+    background:var(--pink-soft);padding:7px 14px;border-radius:50px;transition:background .2s,color .2s;
+  }
+  .dl a:hover{background:var(--pink-deep);color:#fff}
+
+  .note{
+    max-width:860px;margin:56px auto 0;padding:26px 28px;background:#fff;border-radius:26px;
+    border:2px dashed #FFD0E5;box-shadow:0 10px 26px rgba(180,120,170,.10);
+  }
+  .note h2{font-size:1.25rem;font-weight:800;margin-bottom:12px;color:var(--pink-deep)}
+  .note ul{list-style:none;display:grid;gap:9px}
+  .note li{font-size:.95rem;font-weight:600;color:#6D5166;display:flex;gap:10px;align-items:flex-start;line-height:1.8}
+  .note li span{color:var(--pink-deep);font-weight:900}
+  footer{text-align:center;padding:46px 20px 0;font-weight:700;color:#A3829A;font-size:.95rem}
+  footer b{color:var(--pink-deep)}
+
+  /* عارض الصورة */
+  .viewer{
+    position:fixed;inset:0;background:rgba(58,26,48,.72);backdrop-filter:blur(6px);
+    display:none;align-items:center;justify-content:center;z-index:99;padding:24px;
+  }
+  .viewer.on{display:flex}
+  .viewer img{max-width:min(86vw,560px);max-height:82vh;border-radius:26px;box-shadow:0 30px 70px rgba(0,0,0,.4)}
+  .viewer .close{
+    position:absolute;top:22px;left:26px;background:#fff;border:none;border-radius:50%;
+    width:46px;height:46px;font-size:1.3rem;font-weight:900;color:var(--pink-deep);cursor:pointer;
+  }
+  .toast{
+    position:fixed;bottom:26px;left:50%;transform:translate(-50%,120px);
+    background:var(--plum);color:#fff;padding:12px 24px;border-radius:50px;font-weight:700;
+    transition:transform .35s;z-index:120;
+  }
+  .toast.on{transform:translate(-50%,0)}
+</style>
+</head>
+<body>
+
+<svg class="heart" style="top:14%;right:4%;width:52px" viewBox="0 0 32 29" fill="#FFB3D4"><path d="M16 29S0 18.6 0 9.4C0 4.2 4.2 0 9.4 0c2.9 0 5.4 1.4 6.6 3.5C17.2 1.4 19.7 0 22.6 0 27.8 0 32 4.2 32 9.4 32 18.6 16 29 16 29z"/></svg>
+<svg class="heart" style="top:56%;left:3%;width:38px;animation-delay:1.4s" viewBox="0 0 32 29" fill="#D6C4FF"><path d="M16 29S0 18.6 0 9.4C0 4.2 4.2 0 9.4 0c2.9 0 5.4 1.4 6.6 3.5C17.2 1.4 19.7 0 22.6 0 27.8 0 32 4.2 32 9.4 32 18.6 16 29 16 29z"/></svg>
+<svg class="heart" style="bottom:8%;right:8%;width:44px;animation-delay:.7s" viewBox="0 0 32 29" fill="#FFD8A8"><path d="M16 29S0 18.6 0 9.4C0 4.2 4.2 0 9.4 0c2.9 0 5.4 1.4 6.6 3.5C17.2 1.4 19.7 0 22.6 0 27.8 0 32 4.2 32 9.4 32 18.6 16 29 16 29z"/></svg>
+
+<header>
+  <img class="cover" src="preview/cover.png" alt="غلاف حزمة ستيكرات هيا">
+  <div class="badge">💛 حزمة ستيكرات شخصية هيا</div>
+  <h1>معكم هيا … كونوا مع هيا</h1>
+  <p>تسع ستيكرات بشخصية «هيا» بخلفية شفافة — جاهزة للواتساب وتيليجرام والستوري والتصاميم. مقاس 512×512 مع إطار أبيض (die-cut) وقلوب صغيرة.</p>
+  <div class="actions">
+    <a class="btn btn-primary" href="haya-stickers.zip" download>⬇️ تحميل الحزمة كاملة (ZIP)</a>
+    <a class="btn btn-ghost" href="preview/sheet.png" target="_blank">👀 عرض لوحة المعاينة</a>
+  </div>
+</header>
+
+<main class="grid" id="grid"></main>
+
+<section class="note">
+  <h2>معلومات سريعة</h2>
+  <ul>
+    <li><span>•</span> الملفات بصيغة PNG بخلفية شفافة (512×512) مع نسخة WebP أخف حجمًا للواتساب.</li>
+    <li><span>•</span> لإضافتها كحزمة ستيكرات واتساب: استخدم تطبيق «Sticker Maker» واستورد PNG، بحد أدنى 3 ستيكرات وبحد أقصى 30.</li>
+    <li><span>•</span> للتصاميم والستوري: الأبعاد مناسبة للقصص والبوستات المربّعة، ويمكن تكبير الملف دون فقدان الجودة لأنه غير مضغوط.</li>
+    <li><span>•</span> كل النصوص عربية مشكّلة بشكل صحيح وتُقرأ من اليمين إلى اليسار.</li>
+  </ul>
+</section>
+
+<footer>صُنعت بحب 💗 <b>مسار أون لاين</b> — معكم هيا</footer>
+
+<div class="viewer" id="viewer"><button class="close" id="close">✕</button><img id="viewerImg" alt=""></div>
+<div class="toast" id="toast">تم تحميل الستيكر ✅</div>
+
+<script>
+  const stickers = [
+    {file:'01-wave',       name:'معكم هيا',           cap:'تحية وترحيب بيد مرفوعة',      theme:'#FCE7F3'},
+    {file:'02-hearthands', name:'كونوا مع هيا',       cap:'قلب باليدين — محبة وتقدير',    theme:'#F1EBFF'},
+    {file:'03-presenting', name:'هيا معكم',           cap:'تقديم وشرح — جاهزة دائمًا',    theme:'#E3F8F1'},
+    {file:'04-coffee',     name:'صباح الخير مع هيا',  cap:'قهوة الصباح والطاقة الإيجابية', theme:'#FFF4E2'},
+    {file:'05-thumbsup',   name:'هيا معكم دائمًا',    cap:'تأكيد ونجاح — تمام!',          theme:'#E7F3FF'},
+    {file:'07-laugh',      name:'أهلًا بكم مع هيا',   cap:'ضحكة وترحيب دافئ',            theme:'#FFECEC'},
+    {file:'08-kiss',       name:'معكم هيا',           cap:'قبلة طائرة — شكرًا لكم',       theme:'#FFE9F4'},
+    {file:'09-selfpoint',  name:'هيا في خدمتكم',      cap:'ثقة واعتزاز بالخدمة',         theme:'#F1EBFF'},
+    {file:'06-card',       name:'كونوا مع هيا',       cap:'لوحة مكتوب عليها اسم هيا',     theme:'#FFE9F4'},
+  ];
+
+  const grid = document.getElementById('grid');
+  stickers.forEach((s, i) => {
+    const card = document.createElement('article');
+    card.className = 'card';
+    card.innerHTML = `
+      <div class="art" style="background:linear-gradient(180deg,#fff, ${s.theme})" data-i="${i}">
+        <img src="png/${s.file}.png" alt="ستيكر ${s.name}" loading="lazy">
+      </div>
+      <h3>${s.name}</h3>
+      <div class="cap">${s.cap}</div>
+      <div class="dl">
+        <a href="png/${s.file}.png" download>PNG</a>
+        <a href="webp/${s.file}.webp" download>WebP</a>
+      </div>`;
+    grid.appendChild(card);
+  });
+
+  const viewer = document.getElementById('viewer');
+  const vimg = document.getElementById('viewerImg');
+  const toast = document.getElementById('toast');
+  const showToast = () => { toast.classList.add('on'); setTimeout(() => toast.classList.remove('on'), 1900); };
+
+  grid.addEventListener('click', e => {
+    const art = e.target.closest('.art');
+    if (art) {
+      const s = stickers[+art.dataset.i];
+      vimg.src = `png/${s.file}.png`; viewer.classList.add('on'); return;
+    }
+    if (e.target.tagName === 'A') showToast();
+  });
+  document.getElementById('close').onclick = () => viewer.classList.remove('on');
+  viewer.onclick = e => { if (e.target === viewer) viewer.classList.remove('on'); };
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') viewer.classList.remove('on'); });
+</script>
+</body>
+</html>
